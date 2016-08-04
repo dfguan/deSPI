@@ -469,12 +469,12 @@ int bwt::load_info(const char *dirPath)
 	string bwtFilePath(dirPath);
 	string tidFIlePath(dirPath);
 	if (bwtFilePath[bwtFilePath.length()-1] == '/') {
-		bwtFilePath += "bwt_index";
-		tidFIlePath += "tid_index";
+		bwtFilePath += "despi.bwt";
+		tidFIlePath += "despi.tid";
 	
 	} else {
-		bwtFilePath += "/bwt_index";
-		tidFIlePath += "/tid_index";
+		bwtFilePath += "/despi.bwt";
+		tidFIlePath += "/despi.tid";
 
 	}
 	
@@ -561,12 +561,12 @@ int bwt::write_info(const char *dirPath, vector<uint32_t>& p_nkmerTID)
 	string bwtFilePath(dirPath);
 	string tidFIlePath(dirPath);
 	if (bwtFilePath[bwtFilePath.length()-1] == '/') {
-		bwtFilePath += "bwt_index";
-		tidFIlePath += "tid_index";
+		bwtFilePath += "despi.bwt";
+		tidFIlePath += "despi.tid";
 	
 	} else {
-		bwtFilePath += "/bwt_index";
-		tidFIlePath += "/tid_index";
+		bwtFilePath += "/despi.bwt";
+		tidFIlePath += "/despi.tid";
 
 	}
 	

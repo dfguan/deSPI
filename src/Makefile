@@ -6,31 +6,31 @@ LDFLAGS = -lz -lm -lpthread
 
 SOURCES_SORT = sort.cpp jreader.cpp
 #SOURCES_DEB = debruijin.cpp 
-SOURCES_PRE = preprocess.cpp bwt.cpp main.cpp ui.cpp
+SOURCES = preprocess.cpp bwt.cpp main.cpp ui.cpp
 
 OBJECTS_SORT = $(SOURCES_SORT:.cpp=.o)
 #OBJECTS_DEB = $(SOURCES_DEB:.cpp=.o)
-OBJECTS_PRE = $(SOURCES_PRE:.cpp=.o)
+OBJECTS = $(SOURCES:.cpp=.o)
 
 
-EXECUATION_SORT = sort
+EXECUATION_SORT = deSPI-sort
 #EXECUATION_DEB = deb
-EXECUATION_PRE = gsw
+EXECUATION = deSPI 
 
-DEBUG_SORT = sort.out
+DEBUG_SORT = deSPI-sort.out
 #DEBUG_DEB = deb.out
-DEBUG_PRE = gsw.out
+DEBUG = deSPI.out
 
-all: $(SOURCES_SORT) $(EXECUATION_SORT) $(SOURCES_PRE) $(EXECUATION_PRE)
-	
+all: $(SOURCES_SORT) $(EXECUATION_SORT) $(SOURCES) $(EXECUATION)
+	mkdir -p ../bin && cp $(EXECUATION_SORT) $(EXECUATION) ../deSPI-index ../deSPI-download ../bin
 $(EXECUATION_SORT): $(OBJECTS_SORT)
 	$(CC)  $(OBJECTS_SORT) -o $@ $(LDFLAGS)
 
 #$(EXECUATION_DEB): $(OBJECTS_DEB)
 
 #	$(CC)  $(OBJECTS_DEB) -o $@ $(LDFLAGS)
-$(EXECUATION_PRE): $(OBJECTS_PRE)
-	$(CC) $(OBJECTS_PRE) -o $@ $(LDFLAGS)
+$(EXECUATION): $(OBJECTS)
+	$(CC) $(OBJECTS) -o $@ $(LDFLAGS)
 .cpp.o:
 	$(CC) $(CFLAGS) $< -o $@
 .c.o:
@@ -39,9 +39,9 @@ debug:
 	$(CC) $(DFLAGS) $(SOURCES_SORT) -o $(DEBUG_SORT) $(LDFLAGS)
 
 #	$(CC) $(DFLAGS) $(SOURCES_DEB) -D OUTPUT_STRING_PATH -o $(DEBUG_DEB) $(LDFLAGS)
-	$(CC) $(DFLAGS) $(SOURCES_PRE) -o $(DEBUG_PRE) $(LDFLAGS)
+	$(CC) $(DFLAGS) $(SOURCES) -o $(DEBUG) $(LDFLAGS)
 clean:
-	rm -rf *.o $(EXECUATION_SORT)  $(DEBUG_SORT) $(EXECUATION_PRE) $(DEBUG_PRE)
+	rm -rf *.o $(EXECUATION_SORT)  $(DEBUG_SORT) $(EXECUATION) $(DEBUG)
 
 
  
