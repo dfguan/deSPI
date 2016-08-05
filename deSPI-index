@@ -16,20 +16,25 @@ ARGUMENT
     <DESPI_BIN_DIR>          directory of deSPI execuative files.
     <INDEX_DIR>              directory to store deSPI's index.
 "
-
-if [ $# -lt 5 ]
+if [ $# -lt 4 ]
 then
 	echo "ERROR: Parameters are not enough"
 	printf "$USAGE"
 	exit 1
 fi
 
-
-
 check_for_jellyfish() {
 	JELLYFISH_VERSION=$(jellyfish --version | awk '{print $2}')	
- 	return [[ $JELLYFISH_VERSION =~ ^1\. ]]
+ 	echo $JELLYFISH_VERSION
+	if [[ $JELLYFISH_VERSION =~ ^1\. ]]
+	then
+		return `true`
+	else
+		return `false`
+	fi	
 }
+
+TRANSIT=transit
 
 
 if check_for_jellyfish
@@ -38,15 +43,23 @@ then
 	FILE_SIZE=$(ls -l deSPI-wgs.fa | awk '{print $7}')
 		
 	let JELLYFISH_HASH_SIZE=FILE_SIZE*115/100
-	jellyfish count -m $KMER_SIZE -s $JELLYFISH_HASH_SIZE -t 4 deSPI-wgs.fa
+	
+	cd $TRANSIT
+
+	jellyfish count -m $KMER_SIZE -s $JELLYFISH_HASH_SIZE -t 4 ../deSPI-wgs.fa
 	
 	if [ -e "mer_counts_1" ]
 	then
 		jellyfish merge -o database.jdb.tmp mer_counts_*_
 	else
 		mv mer_counts_0 database.jdb.tmp
-	mv database.jdb.tmp database.jdb
-	
+	fi
+	mv database.jdb.tmp ../database.jdb
+	cd ..
+
+	rm -rf $TRANSIT
+
+
 	if [ -f "$DESPI_BIN_PATH/deSPI-sort" ]
 	then
 		$DESPI_BIN_PATH/deSPI-sort database.jdb $KMER_SIZE
@@ -71,6 +84,7 @@ else
 
 fi	
 
+cd ..
 
 
 
