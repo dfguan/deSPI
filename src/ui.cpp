@@ -165,14 +165,14 @@ int UI::opt_parse(int argc, char *argv[], opts* opt)
 			
 	} else {
 	
-		if (optind + 6 != argc) {
+		if (optind + 5 != argc) {
 			fprintf(stderr, "[opt_parse]: arguments can't be omited!\n"); 
 			return ind_usage(); 
 		
 		} else {
 			++optind;
 			opt->sortedKmer = argv[optind++];
-			opt->gids = argv[optind++];
+			//opt->gids = argv[optind++];
 			opt->tids = argv[optind++];
 			opt->ref = argv[optind++];
 			opt->output = argv[optind++];

@@ -22,7 +22,7 @@ DEBUG_SORT = deSPI-sort.out
 DEBUG = deSPI.out
 
 all: $(SOURCES_SORT) $(EXECUATION_SORT) $(SOURCES) $(EXECUATION)
-	mkdir -p ../bin && cp $(EXECUATION_SORT) $(EXECUATION) ../deSPI-index ../deSPI-download ../bin
+	mkdir -p ../bin && cp $(EXECUATION_SORT) $(EXECUATION)  ../bin
 $(EXECUATION_SORT): $(OBJECTS_SORT)
 	$(CC)  $(OBJECTS_SORT) -o $@ $(LDFLAGS)
 

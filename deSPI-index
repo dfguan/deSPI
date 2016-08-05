@@ -40,21 +40,24 @@ TRANSIT=transit
 if check_for_jellyfish
 then
 	find $REFERENCE_LIB_PATH/ -name '*.fna' | xargs -n 1 cat > deSPI-wgs.fa
-	FILE_SIZE=$(ls -l deSPI-wgs.fa | awk '{print $7}')
-		
+	FILE_SIZE=$(ls -l deSPI-wgs.fa | awk '{print $5}')
+	echo $FILE_SIZE		
 	let JELLYFISH_HASH_SIZE=FILE_SIZE*115/100
-	
-	cd $TRANSIT
+	echo $JELLYFISH_HASH_SIZE	
+	mkdir -p $TRANSIT 
+       	cd $TRANSIT
 
 	jellyfish count -m $KMER_SIZE -s $JELLYFISH_HASH_SIZE -t 4 ../deSPI-wgs.fa
 	
 	if [ -e "mer_counts_1" ]
 	then
-		jellyfish merge -o database.jdb.tmp mer_counts_*_
+		echo hahahha
+		jellyfish merge -o database.jdb.tmp mer_counts_*
 	else
 		mv mer_counts_0 database.jdb.tmp
 	fi
 	mv database.jdb.tmp ../database.jdb
+
 	cd ..
 
 	rm -rf $TRANSIT
@@ -63,7 +66,6 @@ then
 	if [ -f "$DESPI_BIN_PATH/deSPI-sort" ]
 	then
 		$DESPI_BIN_PATH/deSPI-sort database.jdb $KMER_SIZE
-		mv deSPI-srt database.srt
 		rm -f database.jdb
 	else
 		echo "deSPI-index requires deSPI-sort"

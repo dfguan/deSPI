@@ -44,7 +44,7 @@ int genSortedKmers(char *disorderedKmerpath, const uint8_t kmerSize)
 	uint64_t *writeBuf=(uint64_t *)calloc(bufferSize,sizeof(uint64_t));
 	uint64_t bufPoint=0;
 	FILE *fpKmer=NULL;
-	char *kmerPath = "sortedKmers";
+	char *kmerPath = "database.srt";
 	fpKmer=fopen(kmerPath ,"wb");
 	uint64_t tempMove=(kmerSize - BUCKET_LENGTH)<<1; //32 defines kmer_plus_one
 	fprintf(stderr,"start kmercounting\n");
