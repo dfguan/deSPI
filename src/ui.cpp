@@ -43,7 +43,7 @@ struct option long_options[] = {
 
 UI::UI(opts *opt)
 {
-	opt->seed = 31;
+	opt->seed = 30;
 	opt->kmer = 31;
 	opt->inv = 0;
 	opt->num_threads = 1;
@@ -52,14 +52,18 @@ UI::UI(opts *opt)
 
 int UI::ind_usage()
 {
-        fprintf(stderr, "Usage:     %s [Options] <SortedKmer> <gidTID> <Taxonomy> <Reference> <IndexDir>\n\n", PACKAGE_NAME); 
-        fprintf(stderr, "<SortedKmer>           Sorted kmer in binary file\n");
-        fprintf(stderr, "<gidTid>               correspondence between gid and tid\n");
-        fprintf(stderr, "<Taxonomy>             taxonomy tree\n");
-        fprintf(stderr, "<Reference>             References file, in FASTQ/FASTA format\n");
-        fprintf(stderr, "<IndexDir>             The directory storing RHT index\n");
+	fprintf(stderr, "\n"); 
+	fprintf(stderr, "Program:   %s\n", PACKAGE_NAME); 
+	fprintf(stderr, "Version:   %s\n", PACKAGE_VERSION); 
+	fprintf(stderr, "Contact:   %s\n\n", CONTACT); 
+        fprintf(stderr, "Usage:     %s  index  [Options] <SortedKmer> <Taxonomy> <Reference> <IndexDir>\n\n", PACKAGE_NAME); 
+        fprintf(stderr, "<SortedKmer>            sorted kmers\n");
+        //fprintf(stderr, "<gidTid>               correspondence between gid and tid\n");
+        fprintf(stderr, "<Taxonomy>              taxonomy tree\n");
+        fprintf(stderr, "<Reference>             references file, in FASTQ/FASTA format\n");
+        fprintf(stderr, "<IndexDir>              the directory used to store deSPI index\n\n");
         
-        fprintf(stderr, "Options:   -k, --kmer       <uint8_t>          kmer length to build index[31]\n"); 
+        fprintf(stderr, "Options:   -k, --kmer       <uint8_t>          kmer size of de Bruijin graph [31]\n"); 
         fprintf(stderr, "           -h, --help                          help\n");
         fprintf(stderr, "\n"); 
 	return ERROR_PARSE_PARAMS;
@@ -68,11 +72,15 @@ int UI::ind_usage()
 
 int UI::classify_usage()
 {
-        fprintf(stderr, "Usage:     %s [Options] <IndexDir> <ReadFiles>\n\n", PACKAGE_NAME); 
-        fprintf(stderr, "<IndexDir>             The directory storing RHT index\n");
-        fprintf(stderr, "<ReadFiles>             Reads files, in FASTQ/FASTA format\n");
+	fprintf(stderr, "\n"); 
+	fprintf(stderr, "Program:   %s\n", PACKAGE_NAME); 
+	fprintf(stderr, "Version:   %s\n", PACKAGE_VERSION); 
+	fprintf(stderr, "Contact:   %s\n\n", CONTACT); 
+        fprintf(stderr, "Usage:     %s  classify  [Options] <IndexDir> <ReadFiles>\n\n", PACKAGE_NAME); 
+        fprintf(stderr, "<IndexDir>              the directory contains deSPI index\n");
+        fprintf(stderr, "<ReadFiles>             reads files, in FASTQ/FASTA format (separated by space)\n\n");
         
-        fprintf(stderr, "Options:   -s, --seed_len      <uint8_t>          lower bound length to find a seed [31]\n"); 
+        fprintf(stderr, "Options:   -s, --seed_len      <uint8_t>          lower bound of seed length [30]\n"); 
         fprintf(stderr, "           -t, --threads       <int>              number of threads [1]\n");
         fprintf(stderr, "           -h, --help                             help\n");
         fprintf(stderr, "\n"); 
@@ -82,7 +90,10 @@ int UI::classify_usage()
 
 int UI::usage()
 {
-        fprintf(stderr, "Some description here\n\n");
+	fprintf(stderr, "\n"); 
+	fprintf(stderr, "     Program:   %s\n", PACKAGE_NAME); 
+	fprintf(stderr, "     Version:   %s\n", PACKAGE_VERSION); 
+	fprintf(stderr, "     Contact:   %s\n\n", CONTACT); 
         fprintf(stderr, "     Usage:\n");
 	fprintf(stderr, "           %s -h/--help\n", PACKAGE_NAME);
 	fprintf(stderr, "           %s command [options] <arguments>\n", PACKAGE_NAME);

@@ -22,7 +22,7 @@ using namespace std;
 
 #include <stdint.h>
 #include <string.h>
-#define PACKAGE_NAME "gsw"
+#include "desc.h"
 
 typedef struct options {
 	bool isClassify;
