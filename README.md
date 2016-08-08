@@ -54,9 +54,7 @@ ARGUMENT
     <NODE_PATH>              location of nodes.dmp file.
     <DESPI_BIN_DIR>          directory of deSPI executive files.
     <INDEX_DIR>              directory to store the reference index file of deSPI.
-```
-#### deSPI 
-```
+``` #### deSPI ```
 Usage:     deSPI classify [Options] <IndexDir> <ReadFiles>
 
 <IndexDir>             directory to store the reference index file of deSPI
@@ -71,15 +69,7 @@ Options:   -s, --seed_len      <uint8_t>          lower bound of seed length [30
 The memory footprint of deSPI is relatively small for read classification, e.g., using the 1742 RefSeq complete genomes as reference, deSPI requires 11 gigabytes to classify the input reads. However, it is worthnoting that, deSPI requires relatively large memory to construct the reference index, e.g., it requires over 100 gigabytes to construct the index of RefSeq complete genomes. This is mainly due to the index construction of deSPI is still under optimization.The memory footprint will be much lower in the later version.
 
 To make it easier to use, we provide a pre-built index of  RefSeq complete genomes, which is available at:
-
-
-
-
-
-
-
-
-
+https://drive.google.com/folderview?id=0Bwibkj8plEJrSExWMm1LcXFWNnc&usp=sharing
 
 ### User's Guide
 
@@ -114,10 +104,22 @@ With the constructed index, use the following command to run deSPI to classify r
 ```
 cd deSPI
 
-bin/deSPI classify <INDEX_DIR> <READS_FILES>
+bin/deSPI classify INDEX_DIR READS_FILES >Labels
 
 ```
 ---
+
+#### Output Format
+Each sequence classified by deSPI results in a single line of output. Each Output line contains four/three tab-delimited fields; from left to right, they are:
+1. "C"/"U": one letter code indicates that the sequence was either classified or not.
+2. The sequence ID, obtained from the FASTA/FASTQ header.
+3. The taxonomy ID Kraken used to label the sequence; 0 if the sequence is unclassified.
+4. the score of Labels, could be missing if there is no match between read and references.
+
+For example:
+
+           C	ERR636248.35	177416	177416:191           
+indicates that the Sequence "ERR636248.35" is assigned to taxononmy ID 177416, and the score of 177416 is 191.
 
 ###Contact
 For advising, bug reporting and requiring help, please contact ydwang@hit.edu.cn 
