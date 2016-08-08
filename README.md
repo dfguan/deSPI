@@ -46,12 +46,13 @@ WHEN USING database refseq OR genbank:
 ```
 #### deSPI-index
 ```
-deSPI-index <REF_DIR> <NODE_PATH> <DESPI_BIN_DIR> <INDEX_DIR>
+deSPI-index <REF_DIR> <KMER_SIZE> <NODE_PATH> <DESPI_BIN_DIR> <INDEX_DIR>
 
 ARGUMENT
     <REF_DIR>                directory of reference library.
+    <KMER_SIZE>              the k-mer size of reference de Bruijin (RdBG) to be indexed
     <NODE_PATH>              location of nodes.dmp file.
-    <DESPI_BIN_DIR>          directory of deSPI execuative files.
+    <DESPI_BIN_DIR>          directory of deSPI executive files.
     <INDEX_DIR>              directory to store the reference index file of deSPI.
 ```
 #### deSPI 
