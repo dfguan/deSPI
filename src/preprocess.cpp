@@ -1112,6 +1112,10 @@ int preprocess(const char* refPath, const char *kmerPath, const char *taxonomyNo
 	fprintf(stderr,"merging... \n");
 	
 	mergeSort(kmersValue, kmerNum,kmersInfo, kmersTID, nkmerTID,  _2kmers,endNodeNum*(_kmer-1),  bwt_s, hash_index, endNodeNum-1);
+	
+	if (kmersInfo) delete kmersInfo;
+      	if (kmersValue) delete kmersValue;
+	if (kmersTID) delete kmersTID;
 	//cout<<bwt_s<<endl;
 /*	
 	FILE *bwt_string_fp = fopen("bwt_string","w");
