@@ -1,6 +1,8 @@
 #!/bin/bash
 # 
-#Notice: the script is modified from centrifuge-download 
+#Author: Florian Breitwieser
+#Script: centrifuge-download
+#Revised by Dengfeng Guan
 
 
 set -eu -o pipefail
