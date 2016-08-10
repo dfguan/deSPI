@@ -71,8 +71,7 @@ Options:   -s, --seed_len      <uint8_t>          lower bound of seed length [30
 The memory footprint of deSPI is relatively small for read classification, e.g., using the 1742 RefSeq complete genomes as reference, deSPI requires 11 gigabytes to classify the input reads. However, it is worthnoting that, deSPI requires relatively large memory to construct the reference index, e.g., it requires over 100 gigabytes to construct the index of RefSeq complete genomes. This is mainly due to the index construction of deSPI is still under optimization.The memory footprint will be much lower in the later version.
 
 To make it easier to use, we provide a pre-built index of  RefSeq complete genomes, which is available at:
-https://drive.google.com/folderview?id=0Bwibkj8plEJrSExWMm1LcXFWNnc&usp=sharing
-
+https://drive.google.com/open?id=0Bwibkj8plEJrSExWMm1LcXFWNnc
 ### User's Guide
 
 #### Database download
@@ -122,6 +121,14 @@ For example:
 
            C	ERR636248.35	177416	177416:191           
 indicates that the Sequence "ERR636248.35" is assigned to taxononmy ID 177416, and the score of 177416 is 191.
+
+---
+
+### Real sequencing and Simulated datasets
+We benchmarked deSPI with two 'pseudo' real metagenome datasets respectively prduced by Illumina HiSeq and MiSeq platforms. Each of them consists of 20 datasets (50,000 reads per datasets). And we also used RefSeq genomes to generate a simulated dataset, we used Mason simulator to produce 1 million 100 bp Illumina-like reads. All datasets are available at:
+https://drive.google.com/open?id=0Bwibkj8plEJrSExWMm1LcXFWNnc
+
+---
 
 ### Contact
 For advising, bug reporting and requiring help, please contact ydwang@hit.edu.cn 
