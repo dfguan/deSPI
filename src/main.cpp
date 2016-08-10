@@ -29,7 +29,8 @@
 map<uint32_t, uint32_t> taxonomyTree;
 
 extern uint8_t _kmer;
-
+int c_interv;
+int c_iter;
 int read_seq;
 pthread_rwlock_t rwlock;
 const uint8_t Bit3[] = {
@@ -297,7 +298,7 @@ int classify_seq(kseq_t *trunk, int trunkNum,  bwt* bt, cly_r *results, int *int
 		//cout<<useRead<<endl;i
 		counterIntervals = splitBytes(byteFormat, read_len, _kmer, intervals);
 		//cout<<counterIntervals<<endl;
-		int spacedLen = 20;
+		int spacedLen = c_interv * c_iter;
 		hit_counter = 0;
 		//int ind = 4;
 		while (spacedLen) {
@@ -330,7 +331,7 @@ int classify_seq(kseq_t *trunk, int trunkNum,  bwt* bt, cly_r *results, int *int
 				break;
 			else 
 				//--ind;
-				spacedLen -= 5;
+				spacedLen -= c_interv;
 		
 		}	
 			//cout<<endl;
@@ -494,7 +495,10 @@ int classify(opts *p_opt)
 	string taxonomyTreePath = p_opt->lib + "/map";
 
 	_kmer = --p_opt->seed;
-	
+
+	c_interv = p_opt->inv;
+	c_iter = p_opt->iteration;
+
 	bwt *bt =new bwt(_kmer);
 	
 	fprintf(stderr,"loading index\n");

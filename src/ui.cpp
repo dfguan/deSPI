@@ -23,16 +23,17 @@
 
 
 
-char *const short_options = "m:k:g:a:r:o:s:i:t:h";
+char *const short_options = "k:r:s:i:t:h";
 struct option long_options[] = {
-    { "kmer_len",     1,   NULL,    'm'   },
+    //{ "kmer_len",     1,   NULL,    'm'   },
     { "kmers",     1,   NULL,    'k' },
-    { "gids",     1,   NULL,    'g'   },
-    { "tids",     1,   NULL,    'a'   },
-    { "ref",	1,NULL,	'r'},
-    { "output", 1,  NULL, 'o'},
+    //{ "gids",     1,   NULL,    'g'   },
+    //{ "tids",     1,   NULL,    'a'   },
+    //{ "ref",	1,NULL,	'r'},
+    //{ "output", 1,  NULL, 'o'},
+    {"max_it", 1, NULL, 'r'},
     { "seed_len", 1, NULL, 's'},
-    { "inv", 1, NULL, 'i'},
+    { "interv", 1, NULL, 'i'},
     { "threads",1, NULL,'t'},
     //{"gapextended", 1,  NULL,'e'},
     //{"match",   1,  NULL,'c'},
@@ -45,9 +46,9 @@ UI::UI(opts *opt)
 {
 	opt->seed = 30;
 	opt->kmer = 31;
-	opt->inv = 0;
+	opt->inv = 5;
 	opt->num_threads = 1;
-
+	opt->iteration = 4;
 }
 
 int UI::ind_usage()
@@ -82,7 +83,9 @@ int UI::classify_usage()
         
         fprintf(stderr, "Options:   -s, --seed_len      <uint8_t>          lower bound of seed length [30]\n"); 
         fprintf(stderr, "           -t, --threads       <int>              number of threads [1]\n");
-        fprintf(stderr, "           -h, --help                             help\n");
+	fprintf(stderr, "           -r, --max_it        <uint8_t>          maximal iteration times [4]\n");
+	fprintf(stderr, "           -i, --interv        <int8_t>           minimal distance between seeds [5]\n");
+	fprintf(stderr, "           -h, --help                             help\n");
         fprintf(stderr, "\n"); 
 	return ERROR_PARSE_PARAMS;
 
@@ -148,8 +151,11 @@ int UI::opt_parse(int argc, char *argv[], opts* opt)
 		    case 'h':
 			return usage();
 			break;
-		    case 'w':
-			//opt->hit_limit = atoi(optarg);
+		    case 'r':
+			opt->iteration = atoi(optarg);
+			break;
+		    case 'i':
+			opt->inv = atoi(optarg);
 			break;
 		    case 'k':
 			opt->kmer = (uint8_t)atoi(optarg);

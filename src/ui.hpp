@@ -36,6 +36,7 @@ typedef struct options {
 	string lib;
 	uint8_t seed;
 	int inv;
+	int iteration;
 	int num_threads;
 	vector<string> reads;
 	int argc;
