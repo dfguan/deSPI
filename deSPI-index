@@ -28,7 +28,7 @@ check_for_jellyfish() {
 	command -v jellyfish >/dev/null 2>&1 || return `false`
 
 	JELLYFISH_VERSION=$(jellyfish --version | awk '{print $2}')	
- 	echo $JELLYFISH_VERSION
+         #echo $JELLYFISH_VERSION
 	if [[ $JELLYFISH_VERSION =~ ^1\. ]]
 	then
 		return `true`
@@ -44,9 +44,10 @@ if check_for_jellyfish
 then
 	find $REFERENCE_LIB_PATH/ -name '*.fna' | xargs -n 1 cat > deSPI-wgs.fa
 	FILE_SIZE=$(ls -l deSPI-wgs.fa | awk '{print $5}')
-	echo $FILE_SIZE		
+	#echo $FILE_SIZE		
 	let JELLYFISH_HASH_SIZE=FILE_SIZE*115/100
-	echo $JELLYFISH_HASH_SIZE	
+	#echo $JELLYFISH_HASH_SIZE	
+	mkdir -p $INDEX_DIR
 	mkdir -p $TRANSIT 
        	cd $TRANSIT
 
@@ -54,7 +55,7 @@ then
 	
 	if [ -e "mer_counts_1" ]
 	then
-		echo hahahha
+		#echo hahahha
 		jellyfish merge -o database.jdb.tmp mer_counts_*
 	else
 		mv mer_counts_0 database.jdb.tmp
@@ -68,7 +69,8 @@ then
 
 	if [ -f "$DESPI_BIN_PATH/deSPI-sort" ]
 	then
-		$DESPI_BIN_PATH/deSPI-sort database.jdb $KMER_SIZE
+		echo "sorting kmers......"
+		$DESPI_BIN_PATH/deSPI-sort database.jdb $KMER_SIZE >/dev/null 2>/dev/null
 		rm -f database.jdb
 	else
 		echo "deSPI-index requires deSPI-sort"
@@ -77,12 +79,14 @@ then
 	
 	if [ -f "$DESPI_BIN_PATH/deSPI" ]
 	then
-		$DESPI_BIN_PATH/deSPI index database.srt $TAXONOMY_TREE_PATH deSPI-wgs.fa $INDEX_DIR
+		echo "building deSPI index......"
+		$DESPI_BIN_PATH/deSPI index database.srt $TAXONOMY_TREE_PATH deSPI-wgs.fa $INDEX_DIR >/dev/null 2>/dev/null
 	else
 		echo "deSPI-index requires deSPI"
 	fi	
 	rm -f deSPI-wgs.fa database.srt
 	cp $TAXONOMY_TREE_PATH $INDEX_DIR/map
+	echo "finished building deSPI index ^_^"
 else 
 	echo "deSPI requires jellyfish version 1"
 	exit 1
