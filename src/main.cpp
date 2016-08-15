@@ -375,9 +375,9 @@ void report_stats(struct timeval time1, struct timeval time2) {
 	  seconds += time2.tv_sec;
 	  //cerr << "\r";
 	  fprintf(stderr, 
-		  "%llu sequences (%.2f Mbp) processed in %.3fs (%.1f Kseq/m, %.2f Mbp/m).\n",
-		  (unsigned long long) total_sequences, 0 / 1.0e6, seconds,
-		  total_sequences / 1.0e3 /(seconds / 60),0);
+		  "%llu sequences processed in %.3fs (%.1f Kseq/m).\n",
+		  (unsigned long long) total_sequences, seconds,
+		  total_sequences / 1.0e3 /(seconds / 60));
           //total_bases / 1.0e6 / (seconds / 60) );
  // fprintf(stderr, "  %llu sequences classified (%.2f%%)\n",
     //      (unsigned long long) total_classified, total_classified * 100.0 / total_sequences);
