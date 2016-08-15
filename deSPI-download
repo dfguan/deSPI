@@ -132,8 +132,8 @@ while getopts "o:P:d:a:c:g" OPT "$@"; do
         ;;
     esac
 done
-echo $REFSEQ_CATEGORY
-echo $ASSEMBLY_LEVEL
+#echo $REFSEQ_CATEGORY
+#echo $ASSEMBLY_LEVEL
 shift $((OPTIND-1))
 
 [[ $# -eq 1 ]] || { printf "$USAGE" >&2 && exit 1; };

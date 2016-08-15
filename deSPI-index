@@ -24,6 +24,9 @@ then
 fi
 
 check_for_jellyfish() {
+	
+	command -v jellyfish >/dev/null 2>&1 || return `false`
+
 	JELLYFISH_VERSION=$(jellyfish --version | awk '{print $2}')	
  	echo $JELLYFISH_VERSION
 	if [[ $JELLYFISH_VERSION =~ ^1\. ]]

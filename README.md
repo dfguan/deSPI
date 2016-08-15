@@ -9,9 +9,9 @@ make
 
 cd ..
 
-bin/deSPI-download -o taxonomy taxonomy  
+./deSPI-download -o taxonomy taxonomy  
 
-bin/deSPI-index test/refs/ taxonomy/nodes.dmp bin index
+./deSPI-index test/refs/ taxonomy/nodes.dmp bin index
 
 bin/deSPI classify index test/reads/reads.fa >Labels
 ```
