@@ -4,7 +4,7 @@
 #Script: centrifuge-download
 #Site: https://github.com/infphilo/centrifuge/blob/master/centrifuge-download
 #Revised by Dengfeng Guan
-
+#Email: dfguan@hit.edu.cn
 
 set -eu -o pipefail
 
@@ -32,8 +32,8 @@ function download_n_process() {
 
     [[ -f "$LIBDIR/$DOMAIN/$NAME.gz" ]] || $DL_PROG "$LIBDIR/$DOMAIN/$NAME.gz" "$FILEPATH" || { printf "\nError downloading $FILEPATH!\n" >&2 && exit 1; }
     gunzip -f "$LIBDIR/$DOMAIN/$NAME.gz" ||{ printf "\nError gunzipping $LIBDIR/$DOMAIN/$NAME.gz [ downloaded from $FILEPATH ]!\n" >&2 &&  exit 255; }
-    sed -i "s/^>/>tid|$TAXID|ref|/" $LIBDIR/$DOMAIN/$NAME
-   
+    #sed -i "s/^>/>tid|$TAXID|ref|/" $LIBDIR/$DOMAIN/$NAME
+  	echo $NAME $TAXID >>$LIBDIR/"$LIBDIR"_ref2tid.map 
     echo done
 }
 export -f download_n_process
@@ -109,7 +109,7 @@ COMMON OPTIONS
  -P <# of threads>      Number of processes when downloading (uses xargs). Default: '$N_PROC'
 
 WHEN USING database refseq OR genbank:
- -d <domain>            What domain to download. One or more of ${ALL_GENOMES} (comma separated).
+ -d <domain>            What domain to download. One or more of ${ALL_GENOMES} (comma separated, required).
  -a <assembly level>    Only download genomes with the specified assembly level ($ALL_ASSEMBLY_LEVELS). Default: '$ASSEMBLY_LEVEL'.
  -c <refseq category>   only download genomes the specified refseq category ($ALL_REFSEQ_CATEGORY).  Default: any.
  -g                     Download GI map.
@@ -132,13 +132,12 @@ while getopts "o:P:d:a:c:g" OPT "$@"; do
         ;;
     esac
 done
-#echo $REFSEQ_CATEGORY
-#echo $ASSEMBLY_LEVEL
 shift $((OPTIND-1))
 
 [[ $# -eq 1 ]] || { printf "$USAGE" >&2 && exit 1; };
 DATABASE=$1
 
+echo $DATABASE
 #### TAXONOMY DOWNLOAD
 FTP="ftp://ftp.ncbi.nih.gov"
 if [[ "$DATABASE" == "taxonomy" ]]; then 
@@ -196,7 +195,7 @@ fi
 
 for DOMAIN in $DOMAINS; do
     if [[ ! `grep " $DOMAIN" .listing` ]]; then
-        c_echo "$DOMAIN is not a valid domain - use one of the following:" >&2
+        echo "$DOMAIN is not a valid domain - use one of the following:" >&2
         grep '^d' .listing  | sed 's/.* //'
         exit 1
     fi

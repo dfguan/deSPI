@@ -148,149 +148,155 @@ int build_deb(const char *refPath, uint64_t  * kmerValue, uint16_t *kmerInfo, ui
 	} 
 	// initate preparations
 	// start to initiate inout degrees this
-	gzFile fp_z;
-	
-	kseq_t *trunk;
-	
-	fp_z = gzopen(refPath,"r");
+	char _path[1024];
+	char taxid[124];
+	FILE *fp = fopen(refPath, "r");
+	if (!fp) return FILE_OPEN_ERROR;
+	while (fscanf(fp, "%s %s", _path, taxid) != EOF) {
+		gzFile fp_z;
+		
+		kseq_t *trunk;
+		
+		fp_z = gzopen(_path,"r");
 
-	if (!fp_z)
-		return FILE_OPEN_ERROR;
-	trunk = kseq_init(fp_z);
-	
+		if (!fp_z)
+			return FILE_OPEN_ERROR;
+		trunk = kseq_init(fp_z);
+		
 
-	uint64_t mask = ~((uint64_t)0x3 <<((_kmer-1)<<1));
+		uint64_t mask = ~((uint64_t)0x3 <<((_kmer-1)<<1));
 #ifdef CONSIDER_BOTH_ORIENTATION
-	uint64_t mask_rev[] = {(uint64_t)0x3 << ((_kmer - 1)<<1),  (uint64_t)0x2 << ((_kmer - 1)<<1), (uint64_t)0x1 << ((_kmer - 1)<<1), 0};
+		uint64_t mask_rev[] = {(uint64_t)0x3 << ((_kmer - 1)<<1),  (uint64_t)0x2 << ((_kmer - 1)<<1), (uint64_t)0x1 << ((_kmer - 1)<<1), 0};
 #endif
-	//uint32_t gid = 0;	
-	uint32_t tid = 0;
-	
-	uint16_t lastChar;
-	while (kseq_read(trunk)>=0) {
-		//fprintf(stderr,"haha\n");
-		tid = getTID(trunk->name.s);
-		//fprintf(stderr,"kago\n");
-		//uint32_t gid_loc = binSearch(p_taxonIDTab, gidCounter[gid>>10], gidCounter[(gid>>10)+1] - 1, gid);
-		//if (~gid_loc)  tid = p_taxonIDTab[gid_loc].taxonID;   
-		//else 
-		//tid = 0;
-		for(uint64_t i=0; i<trunk->seq.l;++i) {
-			if (Bit[trunk->seq.s[i]] != 4) {
-				uint64_t start = i;
-				while(Bit[trunk->seq.s[++i]]!=  4 && i < trunk->seq.l);
-				//uint64_t end = i - 1;
-				if (i - start > _kmer) {
-					//intiate head 
-					uint64_t key = transIntoBits(trunk->seq.s+start, _kmer);
-					
-					uint64_t loc = binSearch(kmerValue, counter[key>>move],counter[(key>>move)+1]-1, key);
-					
-					kmerInfo[loc] = setOutEdge((uint8_t) kmerInfo[loc], Bit[trunk->seq.s[start + _kmer]]);
-					
-					kmerTID[loc] = LCA(kmerTID[loc], tid); 
-					
-					p_heads.push_back(loc);
-					
-#ifdef CONSIDER_BOTH_ORIENTATION
-					uint64_t keyR = transRCIntoBits(trunk->seq.s+start, _kmer);
-
-					loc = binSearch(kmerValue, counter[keyR>>move],counter[(keyR>>move)+1]-1, keyR);
-					
-					//lastChar = Bit[trunk->seq.s[start + _kmer]]^0x3;					
-					//kmerInfo[loc] = setInEdge((uint8_t) kmerInfo[loc],(uint8_t)lastChar);
-					
-					kmerInfo[loc] = setInEdge((uint8_t) kmerInfo[loc],Bit[trunk->seq.s[start + _kmer]]^0x3);
-					//kmerInfo[loc] |= (lastChar << 10);
-					
-					kmerTID[loc] = LCA(kmerTID[loc], tid); 
-					
-					p_tails.push_back(loc);
-#endif
-					for (uint64_t j = start + 1; j < i - _kmer; ++j) {
-						key = ((key & mask) << 2)| Bit[trunk->seq.s[j+_kmer-1]];
-						//print(trunk->seq.s+j);		
-						loc = binSearch(kmerValue, counter[key>>move],counter[(key>>move)+1]-1, key);
-					
-						//lastChar = Bit[trunk->seq.s[j-1]];
-						kmerInfo[loc] = setInEdge((uint8_t) kmerInfo[loc], Bit[trunk->seq.s[j-1]]);
-						//kmerInfo[loc] = setInEdge((uint8_t) kmerInfo[loc],(uint8_t)lastChar);
-						
-						//kmerInfo[loc] |= (lastChar << 10);
-						
-						kmerInfo[loc] = setOutEdge((uint8_t) kmerInfo[loc], Bit[trunk->seq.s[j+_kmer]]);
-						//fprintf(stderr,"cycling ....\n");	
-						kmerTID[loc] = LCA(kmerTID[loc], tid); 
-#ifdef CONSIDER_BOTH_ORIENTATION
-						
-						keyR = (keyR >> 2) | mask_rev[Bit[trunk->seq.s[j + _kmer - 1]]];
-
-						loc = binSearch(kmerValue, counter[keyR>>move],counter[(keyR>>move)+1]-1, keyR);
-						
-						kmerInfo[loc] = setOutEdge((uint8_t) kmerInfo[loc], (Bit[trunk->seq.s[j-1]]^0x3));
-						
-						//lastChar = Bit[trunk->seq.s[j + _kmer]]^0x3;					
-							
-						kmerInfo[loc] = setInEdge((uint8_t) kmerInfo[loc], Bit[trunk->seq.s[j + _kmer]]^0x3);
-						//kmerInfo[loc] = setInEdge((uint8_t) kmerInfo[loc],(uint8_t)lastChar);
-						//kmerInfo[loc] |= (lastChar << 10);
-						kmerTID[loc] = LCA(kmerTID[loc], tid); 
-#endif						
-					} 
-					
-					key = ((key & mask) << 2)| Bit[trunk->seq.s[i-1]];
-				
-					loc = binSearch(kmerValue, counter[key>>move],counter[(key>>move)+1]-1, key);
-					//lastChar = Bit[trunk->seq.s[i - _kmer -1]];
-					kmerInfo[loc] = setInEdge((uint8_t) kmerInfo[loc],Bit[trunk->seq.s[i - _kmer -1]]);
-					//kmerInfo[loc] = setInEdge((uint8_t) kmerInfo[loc],(uint8_t)lastChar);
-					
-					//kmerInfo[loc] |= (lastChar<<10);	
-					kmerTID[loc] = LCA(kmerTID[loc], tid); 
-
-					p_tails.push_back(loc);	
-					//fprintf(stderr,"done\n");	
-#ifdef CONSIDER_BOTH_ORIENTATION
-					keyR = (keyR >> 2) | mask_rev[Bit[trunk->seq.s[i - 1]]];
-
-					loc = binSearch(kmerValue, counter[keyR>>move],counter[(keyR>>move)+1]-1, keyR);
-					
-					kmerInfo[loc] = setOutEdge((uint8_t) kmerInfo[loc], (Bit[trunk->seq.s[i - _kmer -1]]^0x3));
-					
-					kmerTID[loc] = LCA(kmerTID[loc], tid); 
-					p_heads.push_back(loc);	
-					
-#endif
-				} else {
-					if (i - start == _kmer) {
-						uint64_t key = transIntoBits(trunk->seq.s + start, _kmer);
+		//uint32_t gid = 0;	
+		uint32_t tid = atoi(taxid);
+		
+		uint16_t lastChar;
+		while (kseq_read(trunk)>=0) {
+			//fprintf(stderr,"haha\n");
+			//fprintf(stderr,"kago\n");
+			//uint32_t gid_loc = binSearch(p_taxonIDTab, gidCounter[gid>>10], gidCounter[(gid>>10)+1] - 1, gid);
+			//if (~gid_loc)  tid = p_taxonIDTab[gid_loc].taxonID;   
+			//else 
+			//tid = 0;
+			for(uint64_t i=0; i<trunk->seq.l;++i) {
+				if (Bit[trunk->seq.s[i]] != 4) {
+					uint64_t start = i;
+					while(Bit[trunk->seq.s[++i]]!=  4 && i < trunk->seq.l);
+					//uint64_t end = i - 1;
+					if (i - start > _kmer) {
+						//intiate head 
+						uint64_t key = transIntoBits(trunk->seq.s+start, _kmer);
 						
 						uint64_t loc = binSearch(kmerValue, counter[key>>move],counter[(key>>move)+1]-1, key);
 						
-						p_heads.push_back(loc);
-			
+						kmerInfo[loc] = setOutEdge((uint8_t) kmerInfo[loc], Bit[trunk->seq.s[start + _kmer]]);
+						
 						kmerTID[loc] = LCA(kmerTID[loc], tid); 
-					
-						p_tails.push_back(loc);	
-				
+						
+						p_heads.push_back(loc);
+						
 #ifdef CONSIDER_BOTH_ORIENTATION
 						uint64_t keyR = transRCIntoBits(trunk->seq.s+start, _kmer);
-				
-						loc = binSearch(kmerValue, counter[keyR>>move],counter[(keyR>>move)+1]-1, keyR);
 
-						p_heads.push_back(loc);
+						loc = binSearch(kmerValue, counter[keyR>>move],counter[(keyR>>move)+1]-1, keyR);
+						
+						//lastChar = Bit[trunk->seq.s[start + _kmer]]^0x3;					
+						//kmerInfo[loc] = setInEdge((uint8_t) kmerInfo[loc],(uint8_t)lastChar);
+						
+						kmerInfo[loc] = setInEdge((uint8_t) kmerInfo[loc],Bit[trunk->seq.s[start + _kmer]]^0x3);
+						//kmerInfo[loc] |= (lastChar << 10);
+						
 						kmerTID[loc] = LCA(kmerTID[loc], tid); 
+						
 						p_tails.push_back(loc);
 #endif
-					}
-				
-				}
+						for (uint64_t j = start + 1; j < i - _kmer; ++j) {
+							key = ((key & mask) << 2)| Bit[trunk->seq.s[j+_kmer-1]];
+							//print(trunk->seq.s+j);		
+							loc = binSearch(kmerValue, counter[key>>move],counter[(key>>move)+1]-1, key);
+						
+							//lastChar = Bit[trunk->seq.s[j-1]];
+							kmerInfo[loc] = setInEdge((uint8_t) kmerInfo[loc], Bit[trunk->seq.s[j-1]]);
+							//kmerInfo[loc] = setInEdge((uint8_t) kmerInfo[loc],(uint8_t)lastChar);
+							
+							//kmerInfo[loc] |= (lastChar << 10);
+							
+							kmerInfo[loc] = setOutEdge((uint8_t) kmerInfo[loc], Bit[trunk->seq.s[j+_kmer]]);
+							//fprintf(stderr,"cycling ....\n");	
+							kmerTID[loc] = LCA(kmerTID[loc], tid); 
+#ifdef CONSIDER_BOTH_ORIENTATION
+							
+							keyR = (keyR >> 2) | mask_rev[Bit[trunk->seq.s[j + _kmer - 1]]];
 
+							loc = binSearch(kmerValue, counter[keyR>>move],counter[(keyR>>move)+1]-1, keyR);
+							
+							kmerInfo[loc] = setOutEdge((uint8_t) kmerInfo[loc], (Bit[trunk->seq.s[j-1]]^0x3));
+							
+							//lastChar = Bit[trunk->seq.s[j + _kmer]]^0x3;					
+								
+							kmerInfo[loc] = setInEdge((uint8_t) kmerInfo[loc], Bit[trunk->seq.s[j + _kmer]]^0x3);
+							//kmerInfo[loc] = setInEdge((uint8_t) kmerInfo[loc],(uint8_t)lastChar);
+							//kmerInfo[loc] |= (lastChar << 10);
+							kmerTID[loc] = LCA(kmerTID[loc], tid); 
+#endif						
+						} 
+						
+						key = ((key & mask) << 2)| Bit[trunk->seq.s[i-1]];
+					
+						loc = binSearch(kmerValue, counter[key>>move],counter[(key>>move)+1]-1, key);
+						//lastChar = Bit[trunk->seq.s[i - _kmer -1]];
+						kmerInfo[loc] = setInEdge((uint8_t) kmerInfo[loc],Bit[trunk->seq.s[i - _kmer -1]]);
+						//kmerInfo[loc] = setInEdge((uint8_t) kmerInfo[loc],(uint8_t)lastChar);
+						
+						//kmerInfo[loc] |= (lastChar<<10);	
+						kmerTID[loc] = LCA(kmerTID[loc], tid); 
+
+						p_tails.push_back(loc);	
+						//fprintf(stderr,"done\n");	
+#ifdef CONSIDER_BOTH_ORIENTATION
+						keyR = (keyR >> 2) | mask_rev[Bit[trunk->seq.s[i - 1]]];
+
+						loc = binSearch(kmerValue, counter[keyR>>move],counter[(keyR>>move)+1]-1, keyR);
+						
+						kmerInfo[loc] = setOutEdge((uint8_t) kmerInfo[loc], (Bit[trunk->seq.s[i - _kmer -1]]^0x3));
+						
+						kmerTID[loc] = LCA(kmerTID[loc], tid); 
+						p_heads.push_back(loc);	
+						
+#endif
+					} else {
+						if (i - start == _kmer) {
+							uint64_t key = transIntoBits(trunk->seq.s + start, _kmer);
+							
+							uint64_t loc = binSearch(kmerValue, counter[key>>move],counter[(key>>move)+1]-1, key);
+							
+							p_heads.push_back(loc);
+				
+							kmerTID[loc] = LCA(kmerTID[loc], tid); 
+						
+							p_tails.push_back(loc);	
+					
+#ifdef CONSIDER_BOTH_ORIENTATION
+							uint64_t keyR = transRCIntoBits(trunk->seq.s+start, _kmer);
+					
+							loc = binSearch(kmerValue, counter[keyR>>move],counter[(keyR>>move)+1]-1, keyR);
+
+							p_heads.push_back(loc);
+							kmerTID[loc] = LCA(kmerTID[loc], tid); 
+							p_tails.push_back(loc);
+#endif
+						}
+					
+					}
+
+				}
 			}
 		}
-	}
-	kseq_destroy(trunk);
-	gzclose(fp_z);	
+		kseq_destroy(trunk);
+		gzclose(fp_z);	
+	}	
+	fclose(fp);	
 
 	
 
@@ -1113,9 +1119,9 @@ int preprocess(const char* refPath, const char *kmerPath, const char *taxonomyNo
 	
 	mergeSort(kmersValue, kmerNum,kmersInfo, kmersTID, nkmerTID,  _2kmers,endNodeNum*(_kmer-1),  bwt_s, hash_index, endNodeNum-1);
 	
-	if (kmersInfo) delete kmersInfo;
-      	if (kmersValue) delete kmersValue;
-	if (kmersTID) delete kmersTID;
+	if (kmersInfo) delete[] kmersInfo;
+      	if (kmersValue) delete[] kmersValue;
+	if (kmersTID) delete[] kmersTID;
 	//cout<<bwt_s<<endl;
 /*	
 	FILE *bwt_string_fp = fopen("bwt_string","w");
