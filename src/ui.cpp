@@ -23,7 +23,7 @@
 
 
 
-char *const short_options = "k:r:s:i:t:h";
+char *const short_options = "k:r:s:i:t:ph";
 struct option long_options[] = {
     //{ "kmer_len",     1,   NULL,    'm'   },
     { "kmers",     1,   NULL,    'k' },
@@ -35,6 +35,7 @@ struct option long_options[] = {
     { "seed_len", 1, NULL, 's'},
     { "interv", 1, NULL, 'i'},
     { "threads",1, NULL,'t'},
+    {"paired", 0, NULL, 'p'},
     //{"gapextended", 1,  NULL,'e'},
     //{"match",   1,  NULL,'c'},
     { "help",    0,  NULL,'h'},
@@ -46,9 +47,12 @@ UI::UI(opts *opt)
 {
 	opt->seed = 30;
 	opt->kmer = 31;
-	opt->inv = 5;
+	//opt->inv = 5;
 	opt->num_threads = 1;
-	opt->iteration = 4;
+	//opt->iteration = 4;
+	opt->inv= 4;
+	opt->iteration = 5;
+	opt->isPaired = false;
 }
 
 int UI::ind_usage()
@@ -85,6 +89,7 @@ int UI::classify_usage()
         fprintf(stderr, "           -t, --threads       <int>              number of threads [1]\n");
 	fprintf(stderr, "           -r, --max_it        <uint8_t>          maximal iteration times [4]\n");
 	fprintf(stderr, "           -i, --interv        <int8_t>           minimal distance between seeds [5]\n");
+	//fprintf(stderr, "           -p, --paired        <int8_t>           minimal distance between seeds [5]\n");
 	fprintf(stderr, "           -h, --help                             help\n");
         fprintf(stderr, "\n"); 
 	return ERROR_PARSE_PARAMS;
@@ -123,8 +128,7 @@ int UI::opt_parse(int argc, char *argv[], opts* opt)
 {
 	int c; 
     	int option_index=0;
-
-	//fprintf(stderr,"%denter\t%s\n", argc, argv[0]);
+	
 	if (argc < 2) return usage();
 	if (strcmp(argv[1],"help")==0) {
 		if (argc < 3) return usage();
@@ -163,6 +167,9 @@ int UI::opt_parse(int argc, char *argv[], opts* opt)
 		    case 't':
 			opt->num_threads = atoi(optarg);
 			break;
+		    case 'p':
+			opt->isPaired = true;
+			break;
 		    default:
 			fprintf(stderr,"inappropriate parameters\n");
 			return usage();
@@ -170,6 +177,8 @@ int UI::opt_parse(int argc, char *argv[], opts* opt)
 		}
 	}
 	if (opt->isClassify) {
+	//for (int i=optind; i < argc; ++i)
+			//fprintf(stderr,"%d\t%s\t",i,argv[i]);
 		if (optind + 3 > argc) {
 			fprintf(stderr, "[opt_parse]: arguments can't be omited!\n"); 
 			return classify_usage(); 

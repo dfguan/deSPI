@@ -14,7 +14,7 @@
 //
 // =====================================================================================
 #include "bwt.hpp"
-#define PREINDEXLEN 13
+//#define PREINDEXLEN 13
 
 //char *bwt_str;
 const uint8_t Bit2[] = {
@@ -35,7 +35,6 @@ const uint8_t Bit2[] = {
 	4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,
 	4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4,  4, 4, 4, 4
 };
-uint32_t tempTids[1024];
 //uint8_t _count[] = {0,0,0,0,0};
 //const uint8_t Bit[256];
 int print_str(uint8_t *bytes, int len )
@@ -299,7 +298,7 @@ int bwt::exactMatch(uint8_t *bytes, char *qual, int len, int& match_len, uint32_
 	//cout<<time_consume<<endl;
 
 }
-int bwt::rmdup(int counter, uint32_t* assignedTID)
+int bwt::rmdup(uint32_t *tempTids, int counter, uint32_t* assignedTID)
 {
 	int counter_assignedTID = 1;
 	
@@ -322,6 +321,7 @@ int bwt::exactMatch(uint8_t *bytes, int len, int& match_len, uint32_t* assignedT
 	//mismatch = 0;
 	//fwrite(str,sizeof(char),len,stdout);
 	//cout<<endl;
+	uint32_t tempTids[1024];
 	uint64_t prefixValue = transIntoBits(bytes + len - PREINDEXLEN, PREINDEXLEN ) << 1;
 	sp = hash_index[prefixValue];
 	ep = hash_index[prefixValue + 1] ;
@@ -381,7 +381,7 @@ int bwt::exactMatch(uint8_t *bytes, int len, int& match_len, uint32_t* assignedT
 	//cout<<i<<"\t"<<match_len<<"\t";
 	//print_str(bytes + i,match_len);
 	int count_times = ep - sp;
-	if (match_len > threshold && count_times < 1024) {
+	if (match_len > threshold  && count_times < 1024) {
 		//fprintf(stderr,"sdddddd");	
 		//print_str(bytes + i, match_len);
 		//fprintf(stderr,"%lu,%lu\n",sp,ep);
@@ -401,7 +401,7 @@ int bwt::exactMatch(uint8_t *bytes, int len, int& match_len, uint32_t* assignedT
 	
 	}
 	if (counterTID > 1) 
-		return rmdup(counterTID, assignedTID);
+		return rmdup(tempTids, counterTID, assignedTID);
 	else 
 	       return counterTID;
 
@@ -554,6 +554,127 @@ uint8_t countZero(uint64_t v)
 	}
 	return counter;
 }
+int bwt::write_info(const char *dirPath)
+{
+	
+	string bwtFilePath(dirPath);
+	string tidFIlePath(dirPath);
+	if (bwtFilePath[bwtFilePath.length()-1] == '/') {
+		bwtFilePath += "despi.bwt";
+		tidFIlePath += "despi.tid";
+	
+	} else {
+		bwtFilePath += "/despi.bwt";
+		tidFIlePath += "/despi.tid";
+
+	}
+	
+	FILE *bwt_fp = fopen(bwtFilePath.c_str(), "wb");
+	FILE *tid_fp = fopen(tidFIlePath.c_str(), "wb");
+
+	if (NULL == bwt_fp || NULL == tid_fp)
+		return FILE_OPEN_ERROR;
+	
+	
+	//here combine occ and bwt_str
+	uint32_t bufferSize = 168 << 8;
+      	
+	uint8_t *buffer = new uint8_t[bufferSize + 5]; // just ensure that buffer is long enough acutally it won't surpass buffersize + 2
+
+	
+	//uint64_t theEnd = (len_bwt_str >> 8 );
+	fprintf(stderr,"eere\n");	
+	uint64_t byteLen = ((len_bwt_str + 1) >> 1) + 2 + (occCount << 3);
+	
+	fwrite(&byteLen, 8, 1, bwt_fp);
+
+	uint64_t leftOneChar = len_bwt_str & 0x1;
+	
+	fprintf(stderr,"eere1\n");	
+	uint32_t bufferPoint = 0;
+	
+	//uint8_t fillOcc = 0;
+	
+	uint64_t occPoint = 0;
+
+	for(uint64_t i=0; i< len_bwt_str - leftOneChar; i += 2) {
+
+		if (0 == (i&0xFF)) {
+			//fprintf(stderr,"%u\n",bufferPoint);
+			for(uint8_t j=0; j< 5; ++j) {
+				memcpy((uint64_t *)(buffer + bufferPoint),occCheck+occPoint*5 + j, sizeof(uint64_t));
+				bufferPoint += 8;	
+			}
+			++occPoint;
+		}
+		buffer[bufferPoint++] = (Bit2[bwt_str[i+1]]<<4)|(Bit2[bwt_str[i]]);
+
+		if (bufferPoint >= bufferSize) {
+			//fprintf(stderr,"%lu\n",i);
+			fwrite(buffer, sizeof(uint8_t), bufferSize, bwt_fp);
+			bufferPoint = 0;
+		}  
+	}
+	
+	if (leftOneChar) {
+		buffer[bufferPoint++] = 0xF0|Bit2[bwt_str[len_bwt_str-1]];
+	} 
+	
+	buffer[bufferPoint++] = 0xFF;
+	buffer[bufferPoint++] = 0xFF;
+
+	fwrite(buffer,sizeof(uint8_t), bufferPoint, bwt_fp);
+	fprintf(stderr,"texst\n");
+	/*
+      	fwrite(&len_bwt_str, 8, 1, bwt_fp);
+
+	//p_bwt_s  = new char [bwt_len];
+	fprintf(stderr,"1\n");
+
+	fwrite(bwt_str, sizeof(char), len_bwt_str, bwt_fp);
+	
+	fwrite(&occCount, 8, 1, bwt_fp);
+
+	fwrite(occCheck, sizeof(uint64_t),occCount,bwt_fp);
+	*/
+	fwrite(rank, sizeof(uint64_t),5,bwt_fp);	
+	//*table_len = bwt_len;
+	
+	uint64_t hash_index_size = (uint64_t)1 <<((PREINDEXLEN<<1) + 1);
+	
+	fwrite(hash_index,sizeof(uint64_t),hash_index_size,bwt_fp);
+
+	//p_nkmerTID = new uint32_t[bwt_len];
+	uint64_t AGCTCounterSize = (1 << 16) * 5;
+	fprintf(stderr,"%lutexst1\n",AGCTCounterSize);
+	if (AGCTCounter != NULL) fprintf(stderr,"haha\n");
+	AGCTCounter = new uint8_t[AGCTCounterSize];
+	fprintf(stderr,"texst33\n");
+	if (AGCTCounter == NULL) fprintf(stderr, "zuile\n");
+
+	fwrite(&AGCTCounterSize, 8, 1, bwt_fp);
+	uint64_t mask[] = {0, 0x1111, 0x2222, 0x3333, 0x4444};
+
+	for (uint64_t i=0; i <= 0xFFFF; ++i) {
+		for (uint8_t j=0; j < 5; ++j) AGCTCounter[i*5 + j] = countZero(i^mask[j]);	
+	}
+	
+	fwrite(AGCTCounter, sizeof(uint8_t), AGCTCounterSize, bwt_fp);
+	
+	fprintf(stderr,"texst2\n");
+
+	fwrite(&tidSize, sizeof(uint64_t), 1, tid_fp );
+
+	fwrite(taxonIDTab, sizeof(uint32_t), tidSize, tid_fp);
+	
+	fprintf(stderr,"\n");
+
+	fclose(bwt_fp);
+	fclose(tid_fp);
+	
+	return NORMAL_EXIT;
+
+}
 
 int bwt::write_info(const char *dirPath, vector<uint32_t>& p_nkmerTID)
 {
@@ -669,7 +790,7 @@ int bwt::write_info(const char *dirPath, vector<uint32_t>& p_nkmerTID)
 
 	fwrite(&p_nkmerTID[0], sizeof(uint32_t), tidSize, tid_fp);
 	
-	fprintf(stderr,"%\n");
+	fprintf(stderr,"\n");
 
 	fclose(bwt_fp);
 	fclose(tid_fp);

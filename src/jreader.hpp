@@ -30,9 +30,10 @@ using namespace std;
 #include <stdio.h>
 #include <stdlib.h>
 
+#define JR_HEADER_DATA_SIZE 56
+
 class JReader{
 	private:
-
     		char 		*fptr;
 		int 		fd;
 		uint8_t 	k;
@@ -41,7 +42,6 @@ class JReader{
 		uint64_t 	val_len;
 		uint64_t 	key_ct;
 		string 		Input_DB_filename;
-
 	public:
 
 		void reader(char *data) ;
@@ -51,7 +51,7 @@ class JReader{
 		uint64_t get_key_len();
 		uint64_t get_val_len();
 		uint64_t get_key_ct();
-string get_db_name();
+		string get_db_name();
 };
 
 string transIntoChars(uint64_t v, uint8_t len);

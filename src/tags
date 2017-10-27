@@ -1,0 +1,515 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.8	//
+AC_KSEQ_H	kseq.h	29;"	d
+AC_VERSION_KHASH_H	khash.h	126;"	d
+AGCTCounter	bwt.hpp	/^	uint8_t* 		AGCTCounter;$/;"	m	class:bwt
+BUCKET_CAPACITY	sort.cpp	30;"	d	file:
+BUCKET_LENGTH	sort.cpp	29;"	d	file:
+BUFFERSIZE	sort.cpp	27;"	d	file:
+Bit	debruijin.cpp	/^const uint8_t Bit[] = {$/;"	v
+Bit	preprocess.cpp	/^const uint8_t Bit[] = {$/;"	v
+Bit	se_node.hpp	/^const uint8_t Bit[] = {$/;"	v
+Bit2	bwt.cpp	/^const uint8_t Bit2[] = {$/;"	v
+Bit3	index.cpp	/^const uint8_t Bit3[] = {$/;"	v
+Bit3	main.cpp	/^const uint8_t Bit3[] = {$/;"	v
+CC	Makefile	/^CC = g++$/;"	m
+CFLAGS	Makefile	/^CFLAGS = -c -Wall -O3#-D CONSIDER_BOTH_ORIENTATION #-D OUTPUT_STRING_PATH $/;"	m
+CONTACT	desc.h	4;"	d
+DEBUG	Makefile	/^DEBUG = deSPI.out$/;"	m
+DFLAGS	Makefile	/^DFLAGS = -g -Wall$/;"	m
+DG_BUFFERSIZE	sort.cpp	34;"	d	file:
+ERROR_PARSE_PARAMS	error.hpp	23;"	d
+EXECUATION	Makefile	/^EXECUATION = deSPI $/;"	m
+FILE_NUM_LIMIT	sort.cpp	33;"	d	file:
+FILE_OPEN_ERROR	error.hpp	21;"	d
+F_ARY_BUFFER_SIZE	special_kmers.hpp	38;"	d
+Input_DB_filename	jreader.hpp	/^		string 		Input_DB_filename;$/;"	m	class:JReader
+JR_HEADER_DATA_SIZE	jreader.hpp	33;"	d
+JReader	jreader.cpp	/^JReader::JReader(string filename_str, string mode, size_t size) $/;"	f	class:JReader
+JReader	jreader.hpp	/^class JReader{$/;"	c
+KBTREE_INIT	kbtree.c	/^KBTREE_INIT(uint64_t, intmap_t, __intcmp)$/;"	f
+KBTREE_INIT	kbtree.h	364;"	d
+KB_DEFAULT_SIZE	kbtree.h	374;"	d
+KB_MAX_DEPTH	kbtree.h	35;"	d
+KHASH_DECLARE	khash.h	357;"	d
+KHASH_INIT	khash.h	365;"	d
+KHASH_INIT2	khash.h	361;"	d
+KHASH_MAP_INIT_INT	khash.h	593;"	d
+KHASH_MAP_INIT_INT64	khash.h	608;"	d
+KHASH_MAP_INIT_STR	khash.h	624;"	d
+KHASH_SET_INIT_INT	khash.h	585;"	d
+KHASH_SET_INIT_INT64	khash.h	600;"	d
+KHASH_SET_INIT_STR	khash.h	616;"	d
+KS_SEP_MAX	kseq.h	37;"	d
+KS_SEP_SPACE	kseq.h	35;"	d
+KS_SEP_TAB	kseq.h	36;"	d
+LCA	evo_tree.hpp	/^	uint32_t LCA(uint32_t tid1, uint32_t tid2) {$/;"	f	class:evo_tree
+LCA	main.cpp	/^uint32_t LCA(uint32_t tid1, uint32_t tid2)$/;"	f
+LCA	preprocess.cpp	/^uint32_t LCA(uint32_t tid1, uint32_t tid2)$/;"	f
+LDFLAGS	Makefile	/^LDFLAGS = -lz -lm -lpthread$/;"	m
+LEN_LIMIT	index.cpp	23;"	d	file:
+LEN_LIMIT	main.cpp	26;"	d	file:
+LFC	bwt.cpp	/^uint64_t bwt::LFC(uint64_t r, uint8_t c) $/;"	f	class:bwt
+MEM_ALLOCATE_ERROR	error.hpp	22;"	d
+NORMAL_EXIT	error.hpp	20;"	d
+N_NEEDED	index.cpp	25;"	d	file:
+N_NEEDED	main.cpp	28;"	d	file:
+OBJECTS	Makefile	/^OBJECTS = $(SOURCES:.cpp=.o)$/;"	m
+PACKAGE_NAME	desc.h	2;"	d
+PACKAGE_VERSION	desc.h	3;"	d
+PREINDEXLEN	bwt.hpp	30;"	d
+PREINDEXLEN	debruijin.hpp	79;"	d
+PREINDEXLEN	preprocess.hpp	45;"	d
+SE_THREAD_NUM	se_node.hpp	39;"	d
+SOURCES	Makefile	/^SOURCES = sort.cpp bwt.cpp main.cpp ui.cpp jreader.cpp special_kmers.cpp$/;"	m
+STKSIZ	sort.cpp	32;"	d	file:
+THREAD_NUM	sort.cpp	31;"	d	file:
+UI	ui.cpp	/^UI::UI(opts *opt)$/;"	f	class:UI
+UI	ui.hpp	/^class UI {$/;"	c
+UNKNOWN_ERROR	error.hpp	24;"	d
+_BWT_HPP	bwt.hpp	17;"	d
+_DEBRUIJIN_HPP	debruijin.hpp	17;"	d
+_ERROR_H	error.hpp	17;"	d
+_EVO_TREE_H	evo_tree.hpp	18;"	d
+_JREADER_HPP	jreader.hpp	18;"	d
+_PROCESS_HPP	preprocess.hpp	17;"	d
+_SE_NODE_H	se_node.hpp	19;"	d
+_SE_PAIR_CMP	se_node.hpp	40;"	d
+_SORT_HPP	sort.hpp	17;"	d
+_SPECIAL_KMERS_H	special_kmers.hpp	19;"	d
+__AC_KBTREE_H	kbtree.h	29;"	d
+__AC_KHASH_H	khash.h	118;"	d
+__KB_DEL	kbtree.h	220;"	d
+__KB_GET	kbtree.h	119;"	d
+__KB_GET_AUX1	kbtree.h	103;"	d
+__KB_INIT	kbtree.h	61;"	d
+__KB_INTERVAL	kbtree.h	137;"	d
+__KB_ITR	kbtree.h	320;"	d
+__KB_KEY	kbtree.h	50;"	d
+__KB_PTR	kbtree.h	51;"	d
+__KB_PUT	kbtree.h	160;"	d
+__KB_TREE_T	kbtree.h	53;"	d
+__KHASH_IMPL	khash.h	211;"	d
+__KHASH_PROTOTYPES	khash.h	202;"	d
+__KHASH_TYPE	khash.h	194;"	d
+__KS_TYPE	kseq.h	39;"	d
+__ac_HASH_UPPER	khash.h	/^static const double __ac_HASH_UPPER = 0.77;$/;"	v
+__ac_Wang_hash	khash.h	/^static kh_inline khint_t __ac_Wang_hash(khint_t key)$/;"	f
+__ac_X31_hash_string	khash.h	/^static kh_inline khint_t __ac_X31_hash_string(const char *s)$/;"	f
+__ac_fsize	khash.h	173;"	d
+__ac_isdel	khash.h	166;"	d
+__ac_iseither	khash.h	167;"	d
+__ac_isempty	khash.h	165;"	d
+__ac_set_isboth_false	khash.h	170;"	d
+__ac_set_isdel_false	khash.h	168;"	d
+__ac_set_isdel_true	khash.h	171;"	d
+__ac_set_isempty_false	khash.h	169;"	d
+__intcmp	kbtree.c	32;"	d	file:
+__kb_destroy	kbtree.h	79;"	d
+__kb_get_first	kbtree.h	430;"	d
+__kb_traverse	kbtree.h	406;"	d
+__kbstack_t	kbtree.h	/^} __kbstack_t;$/;"	t	typeref:struct:__anon4
+__strcmp	kbtree.c	33;"	d	file:
+_assignedTID	main.cpp	/^	uint32_t* _assignedTID;$/;"	m	struct:__anon8	file:
+_byteformat	main.cpp	/^	uint8_t *_byteformat;$/;"	m	struct:__anon8	file:
+_evo_tree	se_node.hpp	/^	evo_tree  *_evo_tree;$/;"	m	class:se_node
+_f_spChar	special_kmers.hpp	/^typedef struct _f_spChar{$/;"	s
+_getline	evo_tree.hpp	/^	int _getline(FILE *in, char *ln)$/;"	f	class:evo_tree
+_getline	main.cpp	/^int _getline(FILE *in, char *ln)$/;"	f
+_getline	preprocess.cpp	/^int _getline(FILE *in, char *ln)$/;"	f
+_interv	main.cpp	/^	int*    _interv;$/;"	m	struct:__anon8	file:
+_interval	index.cpp	/^int _interval; $/;"	v
+_interval	main.cpp	/^int _interval; $/;"	v
+_kmer	main.cpp	/^uint8_t _kmer;$/;"	v
+_kmer	preprocess.cpp	/^uint8_t _kmer;$/;"	v
+_kmersSpchar	debruijin.hpp	/^typedef struct _kmersSpchar{$/;"	s
+_kmersSpchar	preprocess.hpp	/^typedef struct _kmersSpchar{$/;"	s
+_kmersSpchar	special_kmers.hpp	/^typedef struct _kmersSpchar{$/;"	s
+_kspchar	special_kmers.hpp	/^	kmersSpchar *_kspchar;$/;"	m	class:sp_kmers
+_kspchar_counter	special_kmers.hpp	/^	uint64_t _kspchar_counter;$/;"	m	class:sp_kmers
+_rbyteformat	main.cpp	/^	uint8_t *_rbyteformat;$/;"	m	struct:__anon8	file:
+_rinterv	main.cpp	/^	int*	_rinterv;$/;"	m	struct:__anon8	file:
+_s_e	sort.cpp	/^	se_node *_s_e;$/;"	m	struct:thread_aux	file:
+_s_e	sort.cpp	/^	se_node *_s_e;$/;"	m	struct:thread_aux_2	file:
+_s_p	sort.cpp	/^	sp_kmers *_s_p;	$/;"	m	struct:thread_aux	file:
+_s_p	sort.cpp	/^	sp_kmers *_s_p;	$/;"	m	struct:thread_aux_2	file:
+_se_pair	se_node.hpp	/^typedef struct _se_pair{$/;"	s
+algn_r	index.cpp	/^	char 		algn_r[2048];	$/;"	m	struct:__anon10	file:
+algn_r	main.cpp	/^	char 		algn_r[2048];	$/;"	m	struct:__anon7	file:
+argc	ui.hpp	/^	int argc;$/;"	m	struct:options
+argv	ui.hpp	/^	char **argv;$/;"	m	struct:options
+assignedTID	index.cpp	/^uint32_t assignedTID[1024];$/;"	v
+binSearch	debruijin.cpp	/^uint64_t binSearch(vector<uint64_t> &kmersValue,  uint64_t lowerBound, uint64_t upperBound,uint64_t key)$/;"	f
+binSearch	preprocess.cpp	/^uint32_t binSearch(vector<gid_taxid>& p_taxonIDTab,uint64_t lowerBound, uint64_t upperBound, uint32_t key ) $/;"	f
+binSearch	preprocess.cpp	/^uint64_t binSearch(uint64_t *kmersValue,  uint64_t lowerBound, uint64_t upperBound,uint64_t key)$/;"	f
+binSearch_pre	preprocess.cpp	/^uint64_t binSearch_pre(vector<uint64_t>& values, uint64_t lowerBound, uint64_t upperBound, uint64_t key )$/;"	f
+binarySearch	sort.cpp	/^uint64_t binarySearch(uint64_t mk, uint64_t *target, int64_t up)\/\/return the upper bound$/;"	f
+buf_ind	special_kmers.hpp	/^	uint64_t buf_ind;$/;"	m	class:sp_kmers
+build_deb	debruijin.cpp	/^int build_deb(char *path, char *refPath, vector<uint64_t> &kmerValue, vector<uint16_t> &kmerInfo, vector<uint64_t>& p_heads, vector<uint64_t>&  p_tails) \/\/the path indicate a file containing all sorted k+1mers  $/;"	f
+build_deb	preprocess.cpp	/^int build_deb(const char *refPath, uint64_t  * kmerValue, uint16_t *kmerInfo, uint32_t *kmerTID, uint64_t kmerNum, vector<uint64_t>& p_heads, vector<uint64_t>&  p_tails) \/\/the path indicate a file containing all sorted k+1mers  $/;"	f
+build_index	main.cpp	/^int build_index(opts* p_opt)$/;"	f
+bwt	bwt.hpp	/^	bwt(){$/;"	f	class:bwt
+bwt	bwt.hpp	/^	bwt(char *bt, uint64_t len, uint64_t *p_hash_index): bwt_str(bt),  len_bwt_str(len) {$/;"	f	class:bwt
+bwt	bwt.hpp	/^	bwt(int thres){$/;"	f	class:bwt
+bwt	bwt.hpp	/^class bwt{$/;"	c
+bwt_init	bwt.cpp	/^int bwt::bwt_init()$/;"	f	class:bwt
+bwt_occ	bwt.hpp	/^	uint8_t* 		bwt_occ;$/;"	m	class:bwt
+bwt_s	sort.cpp	/^	string  &bwt_s;$/;"	m	struct:thread_aux	file:
+bwt_str	bwt.hpp	/^	char*			bwt_str;$/;"	m	class:bwt
+bwt_str_ptr	bwt.hpp	/^	uint64_t 		bwt_str_ptr;$/;"	m	class:bwt
+byteFormat	index.cpp	/^uint8_t byteFormat[1024]; $/;"	v
+c_bwt	sort.cpp	/^	bwt *c_bwt;$/;"	m	struct:thread_aux_2	file:
+c_interv	main.cpp	/^int c_interv;$/;"	v
+c_iter	main.cpp	/^int c_iter;$/;"	v
+call_special_kmers	sort.cpp	/^void* call_special_kmers(void *arg) $/;"	f
+cas	se_node.hpp	/^    	inline uint32_t cas(volatile uint32_t *ptr, uint32_t oval, uint32_t nval) {$/;"	f	class:se_node
+classify	main.cpp	/^int classify(opts *p_opt)$/;"	f
+classify_seq	index.cpp	/^int classify_seq(kseq_t *trunk, int trunkNum,  bwt& bt, cly_r *results, int offset)$/;"	f
+classify_seq	main.cpp	/^int classify_seq(kseq_t *trunk, int trunkNum,  bwt* bt, cly_r *results, int *intervals, uint8_t *byteFormat, uint32_t* assignedTID)$/;"	f
+classify_seq	main.cpp	/^int classify_seq(kseq_t *trunk,kseq_t *trunkr, int trunkNum,  bwt* bt, cly_r *results, int *intervals, uint8_t *byteFormat, uint32_t* assignedTID)$/;"	f
+classify_seq_2	index.cpp	/^int classify_seq_2(kseq_t *trunk, int trunkNum,  bwt& bt, cly_r *results)$/;"	f
+classify_seq_2	main.cpp	/^int classify_seq_2(kseq_t *trunk, int trunkNum,  bwt* bt, cly_r *results, int *intervals, uint8_t *byteFormat, uint32_t* assignedTID)$/;"	f
+classify_seq_2	main.cpp	/^int classify_seq_2(kseq_t *trunk, kseq_t *trunkr, int trunkNum,  bwt* bt, cly_r *results, int *intervals, int *rintervals, uint8_t *byteFormat, uint8_t *rbyteFormat, uint32_t* assignedTID)$/;"	f
+classify_usage	ui.cpp	/^int UI::classify_usage()$/;"	f	class:UI
+closeFiles	special_kmers.hpp	/^	int closeFiles()$/;"	f	class:sp_kmers
+cly_r	index.cpp	/^} cly_r;$/;"	t	typeref:struct:__anon10	file:
+cly_r	main.cpp	/^} cly_r;$/;"	t	typeref:struct:__anon7	file:
+cmd_usage	ui.cpp	/^int cmd_usage()$/;"	f
+cmp	sort.cpp	/^int cmp(const void *a, const void *b)$/;"	f
+compare_value	special_kmers.cpp	/^bool compare_value(kmersSpchar r, kmersSpchar q)$/;"	f
+countEndNum	preprocess.cpp	/^uint64_t countEndNum(uint16_t* p_kmerInfo,uint64_t p_kmerNum)$/;"	f
+countKmer	sort.cpp	/^uint64_t *countKmer = NULL;$/;"	v
+countNonZero	se_node.hpp	/^	int countNonZero(int i) {$/;"	f	class:se_node
+countZero	bwt.cpp	/^uint8_t countZero(uint64_t v)$/;"	f
+counter	preprocess.cpp	/^uint64_t *counter;$/;"	v
+cutOffMulEdges	preprocess.cpp	/^int cutOffMulEdges(uint64_t *p_kmerValue, uint16_t *p_kmerInfo, uint64_t kmerNum)$/;"	f
+e	se_node.hpp	/^	uint64_t s,e;$/;"	m	struct:_se_pair
+ele	sort.cpp	/^}ele;$/;"	t	typeref:struct:element	file:
+element	sort.cpp	/^typedef struct element{$/;"	s	file:
+end_nodes	se_node.hpp	/^	khash_t(64) *end_nodes;$/;"	m	class:se_node
+error	evo_tree.hpp	/^	void error(const char *msg) {$/;"	f	class:evo_tree
+error	se_node.hpp	/^	void error(char *er)$/;"	f	class:se_node
+evo_tree	evo_tree.hpp	/^	evo_tree(const char *path) {$/;"	f	class:evo_tree
+evo_tree	evo_tree.hpp	/^class  evo_tree{$/;"	c
+exactMatch	bwt.cpp	/^int bwt::exactMatch(uint8_t *bytes, char *qual, int len, int& match_len, uint32_t* assignedTID) $/;"	f	class:bwt
+exactMatch	bwt.cpp	/^int bwt::exactMatch(uint8_t *bytes, int len, int& match_len, uint32_t* assignedTID) $/;"	f	class:bwt
+externalSort	special_kmers.hpp	/^	int externalSort()$/;"	f	class:sp_kmers
+f_ary	special_kmers.hpp	/^	FILE **f_ary;$/;"	m	class:sp_kmers
+f_ary_buf	special_kmers.hpp	/^	kmersSpchar *f_ary_buf;$/;"	m	class:sp_kmers
+f_spChar	special_kmers.hpp	/^}f_spChar;$/;"	t	typeref:struct:_f_spChar
+fd	jreader.hpp	/^		int 		fd;$/;"	m	class:JReader
+fileNameList	se_node.hpp	/^	vector<const char *> fileNameList;$/;"	m	class:se_node
+fileNames	se_node.hpp	/^	string          fileNames;$/;"	m	class:se_node
+fileNum	se_node.hpp	/^	int 		fileNum;$/;"	m	class:se_node
+file_id	se_node.hpp	/^	int file_id; 	$/;"	m	class:se_node
+findInsertPos	preprocess.cpp	/^uint64_t findInsertPos(uint64_t* p_kmersValue, uint64_t p_s, uint64_t p_e, uint64_t key)$/;"	f
+findInsertPos	sort.cpp	/^uint64_t findInsertPos(uint64_t* p_kmersValue, uint64_t p_s, uint64_t p_e, uint64_t key)$/;"	f
+find_s_e_pair	se_node.hpp	/^	int find_s_e_pair(const char *_path, uint32_t taxid)$/;"	f	class:se_node
+flush_sp_kmers	special_kmers.hpp	/^	int flush_sp_kmers()$/;"	f	class:sp_kmers
+fptr	jreader.hpp	/^    		char 		*fptr;$/;"	m	class:JReader
+gID	preprocess.hpp	/^	uint32_t gID;$/;"	m	struct:__anon9
+genSpKmers	preprocess.cpp	/^int genSpKmers(uint64_t kvalue, uint32_t p_tid, kmersSpchar* p_2k, uint8_t* p_2k_0p, uint64_t& s_ind)$/;"	f
+gen_sp_kmers	special_kmers.hpp	/^	int gen_sp_kmers(uint64_t kvalue, uint32_t tid, bwt *c_bwt) {$/;"	f	class:sp_kmers
+gen_sp_kmers	special_kmers.hpp	/^	int gen_sp_kmers(uint64_t kvalue, uint32_t tid, string &bwt_s, vector<uint32_t> &tids) {$/;"	f	class:sp_kmers
+getTID	preprocess.cpp	/^uint32_t getTID(char *seq_name) $/;"	f
+get_db_name	jreader.cpp	/^string JReader::get_db_name()$/;"	f	class:JReader
+get_key_ct	jreader.cpp	/^uint64_t JReader::get_key_ct()$/;"	f	class:JReader
+get_key_len	jreader.cpp	/^uint64_t JReader::get_key_len()$/;"	f	class:JReader
+get_val_len	jreader.cpp	/^uint64_t JReader::get_val_len()$/;"	f	class:JReader
+gidCounter	preprocess.cpp	/^uint32_t *gidCounter;$/;"	v
+gid_taxid	preprocess.hpp	/^}gid_taxid;$/;"	t	typeref:struct:__anon9
+gids	ui.hpp	/^	string gids;$/;"	m	struct:options
+hahah	kbtree.c	/^	int hahah;$/;"	m	struct:__anon5	file:
+handleFrstLastKmer	preprocess.cpp	/^int handleFrstLastKmer(uint64_t  *p_kmerValue, uint16_t *p_kmerInfo, vector<uint64_t> &h, vector<uint64_t> &t)$/;"	f
+hashKmer	sort.cpp	/^uint64_t *hashKmer = NULL;$/;"	v
+hash_index	bwt.hpp	/^	uint64_t 		*hash_index;		$/;"	m	class:bwt
+header_size	jreader.cpp	/^size_t JReader::header_size() $/;"	f	class:JReader
+i	kbtree.h	/^	int i;$/;"	m	struct:__anon2
+i	kbtree.h	/^	int i;$/;"	m	struct:__anon4
+inEdgesNum	preprocess.cpp	/^uint8_t inEdgesNum(uint8_t info)$/;"	f
+in_shift	se_node.hpp	/^	uint64_t in_shift;	$/;"	m	class:se_node
+ind	sort.cpp	/^	int      ind;$/;"	m	struct:element	file:
+ind	special_kmers.hpp	/^	int ind;$/;"	m	struct:_f_spChar
+ind	special_kmers.hpp	/^	uint64_t ind;	$/;"	m	class:sp_kmers
+ind_usage	ui.cpp	/^int UI::ind_usage()$/;"	f	class:UI
+infor	debruijin.hpp	/^	uint8_t  infor;\/\/fore 5bp indicate sp pos and last 3 kmer indicate lastchar$/;"	m	struct:_kmersSpchar
+infor	preprocess.hpp	/^	uint8_t  infor;\/\/fore 5bp indicate sp pos and last 3 kmer indicate lastchar$/;"	m	struct:_kmersSpchar
+infor	special_kmers.hpp	/^	uint8_t  infor;\/\/fore 5bp indicate sp pos and last 3 kmer indicate lastchar$/;"	m	struct:_kmersSpchar
+initiate_space	special_kmers.hpp	/^	int initiate_space(size_t kspCounter)$/;"	f	class:sp_kmers
+insert_end	se_node.hpp	/^	int insert_end(uint64_t k)$/;"	f	class:se_node
+insert_start	se_node.hpp	/^	int insert_start(uint64_t k)$/;"	f	class:se_node
+intervals	index.cpp	/^int intervals[1024];$/;"	v
+intmap_t	kbtree.c	/^} intmap_t;$/;"	t	typeref:struct:__anon5	file:
+inv	ui.hpp	/^	int inv;$/;"	m	struct:options
+isClassified	index.cpp	/^	char 		isClassified;$/;"	m	struct:__anon10	file:
+isClassified	main.cpp	/^	char 		isClassified;$/;"	m	struct:__anon7	file:
+isClassify	ui.hpp	/^	bool isClassify;$/;"	m	struct:options
+isEnd	preprocess.cpp	/^bool isEnd(uint16_t info) $/;"	f
+isNotSingle	se_node.hpp	/^	bool isNotSingle[32];$/;"	m	class:se_node
+isPaired	ui.hpp	/^	bool isPaired;$/;"	m	struct:options
+isStart	preprocess.cpp	/^bool isStart(uint16_t info) $/;"	f
+isStartNode	sort.cpp	/^bool     *isStartNode;$/;"	v
+is_internal	kbtree.h	/^	int32_t is_internal:1, n:31;$/;"	m	struct:__anon1
+iteration	ui.hpp	/^	int iteration;$/;"	m	struct:options
+k	jreader.hpp	/^		uint8_t 	k;$/;"	m	class:JReader
+kb_del	kbtree.h	381;"	d
+kb_delp	kbtree.h	385;"	d
+kb_destroy	kbtree.h	378;"	d
+kb_generic_cmp	kbtree.h	396;"	d
+kb_get	kbtree.h	379;"	d
+kb_getp	kbtree.h	383;"	d
+kb_init	kbtree.h	377;"	d
+kb_interval	kbtree.h	382;"	d
+kb_intervalp	kbtree.h	386;"	d
+kb_itr_first	kbtree.h	388;"	d
+kb_itr_get	kbtree.h	389;"	d
+kb_itr_key	kbtree.h	391;"	d
+kb_itr_next	kbtree.h	390;"	d
+kb_itr_valid	kbtree.h	392;"	d
+kb_put	kbtree.h	380;"	d
+kb_putp	kbtree.h	384;"	d
+kb_size	kbtree.h	394;"	d
+kb_str_cmp	kbtree.h	397;"	d
+kbitr_t	kbtree.h	/^} kbitr_t;$/;"	t	typeref:struct:__anon3
+kbnode_t	kbtree.h	/^} kbnode_t;$/;"	t	typeref:struct:__anon1
+kbpos_t	kbtree.h	/^} kbpos_t;$/;"	t	typeref:struct:__anon2
+kbtree_t	kbtree.h	376;"	d
+kcalloc	khash.h	180;"	d
+kchar	special_kmers.hpp	/^	kmersSpchar kchar;$/;"	m	struct:_f_spChar
+key	kbtree.c	/^	char *key;$/;"	m	struct:__anon6	file:
+key	kbtree.c	/^	uint64_t key;$/;"	m	struct:__anon5	file:
+key	sort.cpp	/^	uint64_t key;$/;"	m	struct:element	file:
+key_bits	jreader.hpp	/^		uint64_t 	key_bits;$/;"	m	class:JReader
+key_ct	jreader.hpp	/^		uint64_t 	key_ct;$/;"	m	class:JReader
+key_len	jreader.hpp	/^		uint64_t 	key_len;$/;"	m	class:JReader
+keyway_sort_thread	sort.cpp	/^void *keyway_sort_thread(void *)$/;"	f
+kfree	khash.h	189;"	d
+kh_begin	khash.h	528;"	d
+kh_clear	khash.h	453;"	d
+kh_cstr_t	khash.h	/^typedef const char *kh_cstr_t;$/;"	t
+kh_del	khash.h	491;"	d
+kh_destroy	khash.h	446;"	d
+kh_end	khash.h	535;"	d
+kh_exist	khash.h	499;"	d
+kh_foreach	khash.h	558;"	d
+kh_foreach_value	khash.h	572;"	d
+kh_get	khash.h	483;"	d
+kh_init	khash.h	439;"	d
+kh_inline	khash.h	148;"	d
+kh_inline	khash.h	150;"	d
+kh_int64_hash_equal	khash.h	389;"	d
+kh_int64_hash_func	khash.h	385;"	d
+kh_int_hash_equal	khash.h	379;"	d
+kh_int_hash_func	khash.h	375;"	d
+kh_int_hash_func2	khash.h	422;"	d
+kh_key	khash.h	507;"	d
+kh_n_buckets	khash.h	549;"	d
+kh_put	khash.h	474;"	d
+kh_resize	khash.h	461;"	d
+kh_size	khash.h	542;"	d
+kh_str_hash_equal	khash.h	410;"	d
+kh_str_hash_func	khash.h	406;"	d
+kh_val	khash.h	516;"	d
+kh_value	khash.h	521;"	d
+khash_t	khash.h	432;"	d
+khint32_t	khash.h	/^typedef unsigned int khint32_t;$/;"	t
+khint32_t	khash.h	/^typedef unsigned long khint32_t;$/;"	t
+khint64_t	khash.h	/^typedef unsigned long khint64_t;$/;"	t
+khint64_t	khash.h	/^typedef unsigned long long khint64_t;$/;"	t
+khint_t	khash.h	/^typedef khint32_t khint_t;$/;"	t
+khiter_t	khash.h	/^typedef khint_t khiter_t;$/;"	t
+klib_unused	khash.h	156;"	d
+klib_unused	khash.h	158;"	d
+kmalloc	khash.h	183;"	d
+kmer	ui.hpp	/^	uint8_t kmer;$/;"	m	struct:options
+kmerN	sort.cpp	/^	uint64_t kmerN;$/;"	m	struct:thread_aux_2	file:
+kmer_len	se_node.hpp	/^	uint8_t kmer_len;$/;"	m	class:se_node
+kmer_len	special_kmers.hpp	/^	uint8_t kmer_len;	$/;"	m	class:sp_kmers
+kmersSpchar	debruijin.hpp	/^}kmersSpchar;$/;"	t	typeref:struct:_kmersSpchar
+kmersSpchar	preprocess.hpp	/^}kmersSpchar;$/;"	t	typeref:struct:_kmersSpchar
+kmersSpchar	special_kmers.hpp	/^}kmersSpchar;$/;"	t	typeref:struct:_kmersSpchar
+kmersize	sort.cpp	/^	uint8_t kmersize;$/;"	m	struct:thread_aux_2	file:
+krealloc	khash.h	186;"	d
+kroundup32	khash.h	176;"	d
+len_bwt_occ	bwt.hpp	/^	uint64_t 		len_bwt_occ;$/;"	m	class:bwt
+len_bwt_str	bwt.hpp	/^	uint64_t 		len_bwt_str;$/;"	m	class:bwt
+lib	ui.hpp	/^	string lib;$/;"	m	struct:options
+load_info	bwt.cpp	/^int bwt::load_info(const char *dirPath)$/;"	f	class:bwt
+locate	bwt.cpp	/^uint32_t bwt::locate(uint64_t sp)$/;"	f	class:bwt
+locate	bwt.cpp	/^uint32_t bwt::locate(uint64_t sp, uint8_t *bytes, char *qual, int loc, int &extend)$/;"	f	class:bwt
+long_options	ui.cpp	/^struct option long_options[] = {$/;"	v	typeref:struct:option
+main	index.cpp	/^int main(int argc, char *argv[])$/;"	f
+main	main.cpp	/^int main(int argc, char *argv[])$/;"	f
+manager	se_node.hpp	/^	void *manager() {$/;"	f	class:se_node
+max_hit	main.cpp	/^uint32_t max_hit(map<uint32_t, uint32_t> &hit_times) {$/;"	f
+max_hit_tid	index.cpp	/^uint32_t max_hit_tid(map<uint32_t, uint32_t> &hit_times) {$/;"	f
+mergeKmers	sort.cpp	/^int mergeKmers(char *sortedKmersPath, const uint8_t _kmer_len, kmersSpchar *_kspchar, uint64_t kmersSpcharN, se_node *_se_, bwt *c_bwt)$/;"	f
+mergeKmers	sort.cpp	/^int mergeKmers(char *sortedKmersPath, const uint8_t _kmer_len, kmersSpchar *_kspchar, uint64_t kmersSpcharN, se_node *_se_, string &bwt_s, uint64_t *hash_index, vector<uint32_t> &nkmerTID, uint64_t index_start_point)$/;"	f
+mergeSort	preprocess.cpp	/^int mergeSort(uint64_t* p_kmersValue, uint64_t kmerNum, uint16_t* p_kmersInfo, uint32_t* taxonIDTab, vector<uint32_t>& nkmerTID, kmersSpchar* p_2kmers, uint64_t kmersSpcharN, string& p_bwt, uint64_t *hash_index, uint64_t index_start_point)$/;"	f
+mergeSort	sort.cpp	/^int mergeSort(char *fpkmers, const uint8_t _kmer, se_node *_se_,  kmersSpchar* p_2kmers, uint64_t kmersSpcharN, bwt *c_bwt)$/;"	f
+mergeSort	sort.cpp	/^int mergeSort(char *fpkmers, const uint8_t _kmer, se_node *_se_,  kmersSpchar* p_2kmers, uint64_t kmersSpcharN, string& p_bwt, vector<uint32_t>& nkmerTID, uint64_t *hash_index, uint64_t index_start_point)$/;"	f
+mergeSort	sort.cpp	/^int mergeSort(char *fpkmers, const uint8_t _kmer, se_node *_se_,  uint64_t kmersSpcharN, bwt *c_bwt)$/;"	f
+mergeSort	sort.cpp	/^int mergeSort(char *fpkmers, const uint8_t _kmer, se_node *_se_,  uint64_t kmersSpcharN, string& p_bwt, vector<uint32_t>& nkmerTID, uint64_t *hash_index, uint64_t index_start_point)$/;"	f
+multiFlag	sort.cpp	/^uint64_t multiFlag=1;$/;"	v
+multiThreadSort	sort.cpp	/^void *multiThreadSort(void *arg)$/;"	f
+n	kbtree.h	/^	int32_t is_internal:1, n:31;$/;"	m	struct:__anon1
+n_seqs	main.cpp	/^	int 	n_seqs;$/;"	m	struct:__anon8	file:
+node_pair	se_node.hpp	/^	kbtree_t(uint64_t) *node_pair;	$/;"	m	class:se_node
+num_threads	ui.hpp	/^	int num_threads;$/;"	m	struct:options
+occ	bwt.cpp	/^uint64_t bwt::occ(uint64_t r, uint8_t c)$/;"	f	class:bwt
+occCheck	bwt.hpp	/^	uint64_t* 		occCheck;$/;"	m	class:bwt
+occCount	bwt.hpp	/^	uint64_t 		occCount;$/;"	m	class:bwt
+open_file	jreader.cpp	/^void JReader::open_file(string filename_str, string mode, size_t size) $/;"	f	class:JReader
+operator <	debruijin.hpp	/^	bool operator<(const struct _kmersSpchar& r ) const{$/;"	f	struct:_kmersSpchar
+operator <	preprocess.hpp	/^	bool operator<(const struct _kmersSpchar& r ) const{$/;"	f	struct:_kmersSpchar
+operator <	sort.cpp	/^	bool operator<(const element &e) const{$/;"	f	struct:element
+operator <	special_kmers.hpp	/^	bool operator<(const struct _f_spChar& r ) const{$/;"	f	struct:_f_spChar
+operator <	special_kmers.hpp	/^	bool operator<(const struct _kmersSpchar& r ) const{$/;"	f	struct:_kmersSpchar
+operator =	preprocess.hpp	/^	struct _kmersSpchar & operator=(const struct _kmersSpchar& r)  {$/;"	f	struct:_kmersSpchar
+operator =	special_kmers.hpp	/^	struct _kmersSpchar & operator=(const struct _kmersSpchar& r)  {$/;"	f	struct:_kmersSpchar
+opt_parse	ui.cpp	/^int UI::opt_parse(int argc, char *argv[], opts* opt)$/;"	f	class:UI
+options	ui.hpp	/^typedef struct options {$/;"	s
+opts	ui.hpp	/^}opts;$/;"	t	typeref:struct:options
+outEdgesNum	preprocess.cpp	/^uint8_t outEdgesNum(uint8_t info)$/;"	f
+out_mask	se_node.hpp	/^	uint64_t out_mask;$/;"	m	class:se_node
+output	preprocess.cpp	/^int output(uint64_t* p_kmerValue, uint64_t kmerNum, uint16_t* p_kmerInfo, kmersSpchar* p_2kmers, uint8_t* p_2kmers_0p, uint32_t* p_taxonIDTab, vector<uint32_t>& nkmerTID )\/\/initate last char and produce unsorted 2kmers$/;"	f
+output	ui.hpp	/^	string output;$/;"	m	struct:options
+outputDeb	debruijin.cpp	/^int outputDeb(vector<uint64_t> &p_kmerValue, vector<uint16_t> &p_kmerInfo) $/;"	f
+outputDeb	preprocess.cpp	/^int outputDeb(uint64_t *p_kmerValue, uint16_t *p_kmerInfo, uint64_t p_kmerNum) $/;"	f
+output_results	index.cpp	/^int output_results(cly_r *results, int n_results, bool isPairEnd)$/;"	f
+output_results	main.cpp	/^int output_results(cly_r *results, int n_results)$/;"	f
+p	kbtree.h	/^	kbpos_t stack[KB_MAX_DEPTH], *p;$/;"	m	struct:__anon3
+p_bwt	main.cpp	/^	bwt 	*p_bwt;$/;"	m	struct:__anon8	file:
+preprocess	preprocess.cpp	/^int preprocess(const char* refPath, const char *kmerPath, const char *taxonomyNodesPath, const char *giTaxidPath, string& bwt_s, vector<uint32_t>& nkmerTID, uint64_t *hash_index)$/;"	f
+print	debruijin.cpp	/^int print(char *str) $/;"	f
+print	preprocess.cpp	/^int print(char *str) $/;"	f
+printDegrees	sort.cpp	/^int printDegrees(uint64_t degrees)$/;"	f
+print_str	bwt.cpp	/^int print_str(uint8_t *bytes, int len )$/;"	f
+pro_se_node	se_node.hpp	/^	int pro_se_node(uint64_t kmer, uint64_t degree, uint64_t rcKmer, uint64_t rc_degree) $/;"	f	class:se_node
+processKmers	sort.cpp	/^int processKmers(const char *refListPath, const uint8_t kmerSize,const  char *disorderedKmerpath,const char *evo_tree_path, bwt *c_bwt)$/;"	f
+processKmers	sort.cpp	/^int processKmers(const char *refListPath, const uint8_t kmerSize,const  char *disorderedKmerpath,const char *evo_tree_path, string &bwt_s, uint64_t *hash_index, vector<uint32_t> &nkmerTID)$/;"	f
+processKmers	sort.cpp	/^int processKmers(const char *refListPath, const uint8_t kmerSize,const  char *disorderedKmerpath,const char *evo_tree_path, string &bwt_s, uint64_t *hash_index, vector<uint32_t> &nkmerTID, int differ)$/;"	f
+quickSort	sort.cpp	/^void quickSort(uint64_t *base, uint64_t num, int comp(const void *, const void *))$/;"	f
+quickSort	sort.cpp	/^void quickSort(uint64_t *base, uint64_t num, int comp(const void *, const void *), int type)$/;"	f
+rank	bwt.hpp	/^	uint64_t		rank[5];$/;"	m	class:bwt
+rcKmer	sort.cpp	/^uint64_t rcKmer(uint64_t p_kmerValue, uint8_t p_kmerSize) {$/;"	f
+rcOcc	sort.cpp	/^uint64_t rcOcc(uint64_t occ)$/;"	f
+read_Name	index.cpp	/^	char 		*read_Name;$/;"	m	struct:__anon10	file:
+read_Name	main.cpp	/^	char 		*read_Name;$/;"	m	struct:__anon7	file:
+read_len	main.cpp	/^	int			read_len;$/;"	m	struct:__anon7	file:
+read_reads	index.cpp	/^int read_reads(kstream_t *_fp, kseq_t *_seqs, int n_needed)$/;"	f
+read_reads	main.cpp	/^int read_reads(kstream_t *_fp, kseq_t *_seqs, int n_needed)$/;"	f
+read_seq	main.cpp	/^int read_seq;$/;"	v
+reader	jreader.cpp	/^void JReader::reader(char *data) $/;"	f	class:JReader
+reads	ui.hpp	/^	vector<string> reads;$/;"	m	struct:options
+ref	ui.hpp	/^	string ref;$/;"	m	struct:options
+report_stats	index.cpp	/^void report_stats(struct timeval time1, struct timeval time2) {$/;"	f
+report_stats	main.cpp	/^void report_stats(struct timeval time1, struct timeval time2) {$/;"	f
+res	main.cpp	/^	cly_r  *res;$/;"	m	struct:__anon8	file:
+resolve_tree	index.cpp	/^uint32_t resolve_tree(map<uint32_t, uint32_t> &hit_times)$/;"	f
+resolve_tree	main.cpp	/^uint32_t resolve_tree(map<uint32_t, uint32_t> &hit_times)$/;"	f
+resolve_tree	main.cpp	/^uint32_t resolve_tree(map<uint32_t, uint32_t> &hit_times, uint32_t *msc)$/;"	f
+rev	index.cpp	/^const uint8_t rev[]={$/;"	v
+revComRead	index.cpp	/^int revComRead(char* str, int len, char *rstr)$/;"	f
+rmdup	bwt.cpp	/^int bwt::rmdup(uint32_t *tempTids, int counter, uint32_t* assignedTID)$/;"	f	class:bwt
+run	se_node.hpp	/^	void run(void *)$/;"	f	class:se_node
+rwlock	main.cpp	/^pthread_rwlock_t rwlock;$/;"	v
+rwlock	se_node.hpp	/^	pthread_rwlock_t rwlock;$/;"	m	class:se_node
+s	se_node.hpp	/^	uint64_t s,e;$/;"	m	struct:_se_pair
+score	main.cpp	/^	uint32_t 	score;$/;"	m	struct:__anon7	file:
+se_node	se_node.hpp	/^	se_node(const char *refList, const uint8_t _kmer_len, evo_tree *_evo_tree_) {$/;"	f	class:se_node
+se_node	se_node.hpp	/^class se_node{$/;"	c
+se_pair	se_node.hpp	/^}se_pair;$/;"	t	typeref:struct:_se_pair
+sec_intervals	index.cpp	/^int sec_intervals[1024];$/;"	v
+seed	ui.hpp	/^	uint8_t seed;$/;"	m	struct:options
+segCount	sort.cpp	/^uint64_t segCount[THREAD_NUM];$/;"	v
+seqs_poi	main.cpp	/^	kseq_t * seqs_poi;$/;"	m	struct:__anon8	file:
+seqsr_poi	main.cpp	/^	kseq_t *seqsr_poi;$/;"	m	struct:__anon8	file:
+setEnd	preprocess.cpp	/^int setEnd(uint16_t& marker)$/;"	f
+setInEdge	debruijin.cpp	/^uint8_t setInEdge(uint8_t info, uint8_t edge)$/;"	f
+setInEdge	preprocess.cpp	/^uint8_t setInEdge(uint8_t info, uint8_t edge)$/;"	f
+setLabel	preprocess.cpp	/^int setLabel(uint64_t *kmerValue, uint16_t *kmerInfo, uint64_t kmerNum, vector<uint64_t>& p_heads, vector<uint64_t>& p_tails, uint64_t& countEndN)\/\/start end start&end transit$/;"	f
+setOutEdge	debruijin.cpp	/^uint8_t setOutEdge(uint8_t info, uint8_t edge)$/;"	f
+setOutEdge	preprocess.cpp	/^uint8_t setOutEdge(uint8_t info, uint8_t edge)$/;"	f
+setStart	preprocess.cpp	/^int setStart(uint16_t& marker) $/;"	f
+set_bit	sort.cpp	/^uint64_t set_bit [] = {8, 4, 2 , 1, 16}; $/;"	v
+short_options	ui.cpp	/^char *const short_options = "k:r:s:i:t:ph";$/;"	v
+sortKmers	preprocess.cpp	/^int sortKmers(kmersSpchar* start, kmersSpchar* end)$/;"	f
+sortKmers	special_kmers.hpp	/^	int sortKmers()$/;"	f	class:sp_kmers
+sort_thread	sort.cpp	/^void* sort_thread(void *k)$/;"	f
+sort_thread_new	sort.cpp	/^int sort_thread_new(uint64_t *readBuf, uint64_t bufferSize, int file_ind, uint8_t kmerSize)$/;"	f
+sortedKmer	ui.hpp	/^	string sortedKmer;$/;"	m	struct:options
+sp_kmers	special_kmers.hpp	/^	sp_kmers( uint8_t _kmer_len){$/;"	f	class:sp_kmers
+sp_kmers	special_kmers.hpp	/^class sp_kmers{$/;"	c
+species_id	main.cpp	/^set<uint32_t> species_id;$/;"	v
+splitBytes	index.cpp	/^int splitBytes(uint8_t *bytes, int len, int thres)$/;"	f
+splitBytes	main.cpp	/^int splitBytes(uint8_t *bytes, int len, int thres, int* intervals)$/;"	f
+stack	kbtree.h	/^	kbpos_t stack[KB_MAX_DEPTH], *p;$/;"	m	struct:__anon3
+static_manager	se_node.hpp	/^	static void *static_manager(void *context) {$/;"	f	class:se_node
+strmap_t	kbtree.c	/^} strmap_t;$/;"	t	typeref:struct:__anon6	file:
+swap	sort.cpp	/^void swap(const void *a, const void *b)$/;"	f
+swap	sort.cpp	/^void swap(const void *a, const void *b, int type)$/;"	f
+taxID	preprocess.hpp	/^	uint32_t taxID; \/\/store tid$/;"	m	struct:_kmersSpchar
+taxID	special_kmers.hpp	/^	uint32_t taxID; \/\/store tid$/;"	m	struct:_kmersSpchar
+taxonID	preprocess.hpp	/^	uint32_t taxonID;$/;"	m	struct:__anon9
+taxonIDTab	bwt.hpp	/^	uint32_t 		*taxonIDTab;$/;"	m	class:bwt
+taxonTree	main.cpp	/^int taxonTree(const char *taxonomyNodesPath)$/;"	f
+taxonTree	preprocess.cpp	/^int taxonTree(const char *taxonomyNodesPath)$/;"	f
+taxonomyTree	index.cpp	/^map<uint32_t, uint32_t> taxonomyTree;$/;"	v
+taxonomyTree	main.cpp	/^map<uint32_t, uint32_t> taxonomyTree;$/;"	v
+taxons	se_node.hpp	/^	vector<uint32_t> taxons;	$/;"	m	class:se_node
+thread_aux	main.cpp	/^} thread_aux;$/;"	t	typeref:struct:__anon8	file:
+thread_aux	sort.cpp	/^struct thread_aux{$/;"	s	file:
+thread_aux_2	sort.cpp	/^struct thread_aux_2{$/;"	s	file:
+thread_initiate	main.cpp	/^int thread_initiate(thread_aux *p_aux,int num_threads, bwt *_bt, kseq_t *p_seqs, kseq_t *p_seqsr, cly_r *_res, uint8_t *p_byteformat, uint8_t *p_rbyteformat, int *p_interv, int *p_rinterv, uint32_t *p_tids)$/;"	f
+thread_worker	main.cpp	/^static void *thread_worker(void *data)$/;"	f	file:
+threadid	main.cpp	/^	uint8_t threadid;$/;"	m	struct:__anon8	file:
+threshold	bwt.hpp	/^	int 			threshold;$/;"	m	class:bwt
+tid	index.cpp	/^	uint32_t 	tid;$/;"	m	struct:__anon10	file:
+tid	main.cpp	/^	uint32_t 	tid;$/;"	m	struct:__anon7	file:
+tid	se_node.hpp	/^	uint32_t tid;	$/;"	m	struct:_se_pair
+tidSize	bwt.hpp	/^	uint64_t 		tidSize;	$/;"	m	class:bwt
+tid_ptr	bwt.hpp	/^	uint64_t 		tid_ptr;$/;"	m	class:bwt
+tids	sort.cpp	/^	vector<uint32_t> &tids;$/;"	m	struct:thread_aux	file:
+tids	ui.hpp	/^	string tids;$/;"	m	struct:options
+totalCounterNum	sort.cpp	/^uint64_t totalCounterNum;$/;"	v
+totalKmerNum	sort.cpp	/^uint64_t totalKmerNum;$/;"	v
+total_bps	index.cpp	/^uint64_t total_bps = 0;$/;"	v
+total_bps	main.cpp	/^uint64_t total_bps = 0;$/;"	v
+total_sequences	index.cpp	/^uint64_t total_sequences = 0;$/;"	v
+total_sequences	main.cpp	/^uint64_t total_sequences = 0;$/;"	v
+trans	sort.cpp	/^uint64_t trans[256];$/;"	v
+transIntoBits	bwt.cpp	/^uint64_t bwt::transIntoBits(uint8_t *bytes_kmer, uint8_t len)$/;"	f	class:bwt
+transIntoBits	debruijin.cpp	/^uint64_t transIntoBits(char *str_kmer, uint8_t len)$/;"	f
+transIntoBits	preprocess.cpp	/^uint64_t transIntoBits(char *str_kmer, uint8_t len)$/;"	f
+transIntoBits	se_node.hpp	/^	uint64_t transIntoBits(char *str_kmer, uint8_t len)$/;"	f	class:se_node
+transIntoBytes	index.cpp	/^int transIntoBytes( char *str, int len) $/;"	f
+transIntoBytes	main.cpp	/^int transIntoBytes( char *str, int len, uint8_t *byteFormat) $/;"	f
+transIntoChars	debruijin.cpp	/^string transIntoChars(uint64_t v) $/;"	f
+transIntoChars	jreader.cpp	/^string transIntoChars(uint64_t v, uint8_t len) $/;"	f
+transIntoChars	preprocess.cpp	/^string transIntoChars(uint64_t v, uint8_t len) $/;"	f
+transIntoChars	se_node.hpp	/^	string transIntoChars(uint64_t v, uint8_t len) $/;"	f	class:se_node
+transIntoChars	special_kmers.hpp	/^	string transIntoChars(uint64_t v, uint8_t len) $/;"	f	class:sp_kmers
+transRCIntoBits	preprocess.cpp	/^uint64_t transRCIntoBits(char *str_kmer, uint8_t len) $/;"	f
+transRCIntoBits	se_node.hpp	/^	uint64_t transRCIntoBits(char *str_kmer, uint8_t len) $/;"	f	class:se_node
+tree	evo_tree.hpp	/^	std::map<uint32_t, uint32_t> tree;$/;"	m	class:evo_tree
+usage	ui.cpp	/^int UI::usage()$/;"	f	class:UI
+useFile	special_kmers.hpp	/^	bool useFile;$/;"	m	class:sp_kmers
+useFileNum	sort.cpp	/^int 	useFileNum;$/;"	v
+use_f_ary_buf	special_kmers.hpp	/^	bool use_f_ary_buf;$/;"	m	class:sp_kmers
+val	sort.cpp	/^	uint64_t val;	$/;"	m	struct:element	file:
+val_len	jreader.hpp	/^		uint64_t 	val_len;$/;"	m	class:JReader
+value	debruijin.hpp	/^	uint64_t value;$/;"	m	struct:_kmersSpchar
+value	kbtree.c	/^	int value;$/;"	m	struct:__anon5	file:
+value	kbtree.c	/^	int value;$/;"	m	struct:__anon6	file:
+value	preprocess.hpp	/^	uint64_t value;$/;"	m	struct:_kmersSpchar
+value	special_kmers.hpp	/^	uint64_t value;$/;"	m	struct:_kmersSpchar
+write_info	bwt.cpp	/^int bwt::write_info(const char *dirPath)$/;"	f	class:bwt
+write_info	bwt.cpp	/^int bwt::write_info(const char *dirPath, vector<uint32_t>& p_nkmerTID)$/;"	f	class:bwt
+x	kbtree.h	/^	kbnode_t *x;$/;"	m	struct:__anon2
+x	kbtree.h	/^	kbnode_t *x;$/;"	m	struct:__anon4
+~sp_kmers	special_kmers.hpp	/^	~sp_kmers() {$/;"	f	class:sp_kmers

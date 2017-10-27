@@ -1,0 +1,168 @@
+#!/bin/bash
+#set -x 
+REFERENCE_PATH=$1
+KMER_SIZE=31
+TAXONOMY_TREE_PATH=$2
+DESPI_BIN_PATH=$3
+INDEX_DIR=$4
+
+USAGE="
+`basename $0` <TID_REF_MAP> <NODE_PATH> <DESPI_BIN_DIR> <INDEX_DIR>
+
+ARGUMENT
+    <TID_REF_MAP>            map file list reference path and its taxonomy id.
+    <NODE_PATH>              location of nodes.dmp file.
+    <DESPI_BIN_DIR>          directory of deSPI execuative files.
+    <INDEX_DIR>              directory to store deSPI's index.
+"
+if [ $# -lt 4 ]
+then
+	echo "ERROR: Parameters are not enough"
+	printf "$USAGE"
+	exit 1
+fi
+
+check_for_jdbg() {
+	if [ -f "$DESPI_BIN_PATH"/jdbg ] && [ -f "$DESPI_BIN_PATH"/deSPI ]
+	then
+		return `true`
+	else
+		echo "ERROR: Program JDBG doesn't exist"
+		return `false`
+	fi	
+}
+
+TRANSIT=transit
+ABOREFPATH=.abo_ref_path
+
+if check_for_jdbg
+then
+
+	if [ ! -f "$TAXONOMY_TREE_PATH" ]
+	then
+		echo "phelogentic tree missing error, please download it from NCBI"
+		exit 1
+	fi
+	if [ ! -f "$REFERENCE_PATH" ]
+	then
+		echo "Please specify the file contains path of reference and its taxonomy id"
+		exit 1
+	fi
+	
+	if [ ! -f "database.jdb" ]
+	then
+		line=`head -n1 $REFERENCE_PATH | cut -f1`
+		
+		if [ ! "${line:0:1}" == "/" ]
+		then
+			cur_dir=$(pwd)
+			cd $(dirname $REFERENCE_PATH)
+			abs_path=$(pwd)
+			cd $cur_dir
+			sed "s/^/$abs_path&/g" $REFERENCE_PATH > $ABOREFPATH
+		else
+			cp $REFERENCE_PATH $ABOREFPATH 
+		fi	
+		
+		cut -f1 $ABOREFPATH |xargs ls -l >> ref_size
+		#cut -f1 $REFERENCE_PATH |xargs echo  
+		FILE_SIZE=$(awk 'BEGIN{size=0}{size += $5}END{print size}' ref_size)
+		#FILE_SIZE=$(ls -l deSPI-wgs.fa | awk '{print $5}')
+		#echo $FILE_SIZE		
+		rm -f ref_size
+		let JELLYFISH_HASH_SIZE=FILE_SIZE*115/100
+		#echo $JELLYFISH_HASH_SIZE	
+		if [ "$JELLYFISH_HASH_SIZE" -gt "2000000000" ]
+		then
+			JELLYFISH_HASH_SIZE="2000000000"
+		fi
+		
+		mkdir -p $INDEX_DIR
+		mkdir -p $TRANSIT 
+		cd $TRANSIT
+		#echo $DESPI_BIN_DIR
+		#echo $DESPI_BIN_PATH
+		
+		TRANSIT_DESPI_BIN_PATH=$DESPI_BIN_PATH
+		TRANSIT_TAXONOMY_TREE_PATH=$TAXONOMY_TREE_PATH
+		TRANSIT_REFERENCE_PATH=$REFERENCE_PATH
+		
+		if [ ! "${DESPI_BIN_PATH:0:1}" == "/" ]
+		then
+			TRANSIT_DESPI_BIN_PATH="../$DESPI_BIN_PATH"
+		fi	
+		
+		if [ ! "${TAXONOMY_TREE_PATH:0:1}" == "/" ]
+		then
+			TRANSIT_TAXONOMY_TREE_PATH="../$TAXONOMY_TREE_PATH"
+		fi	
+		if [ ! "${REFERENCE_PATH:0:1}" == "/" ]
+		then
+			TRANSIT_REFERENCE_PATH="../$REFERENCE_PATH"
+		fi	
+		
+		if [ ! -f database.jdb ]
+		then
+			if [ ! -f "mer_counts_0" ]
+			then
+				echo "generating kmers, hash size:$JELLYFISH_HASH_SIZE"
+				"$TRANSIT_DESPI_BIN_PATH"/jdbg count -m $KMER_SIZE -s $JELLYFISH_HASH_SIZE -t 4 -C -T $TRANSIT_TAXONOMY_TREE_PATH $ABOREFPATH
+				rm -f $ABOREFPATH
+			fi
+
+			if [ -e "mer_counts_1" ]
+			then
+				#echo hahahha
+				$TRANSIT_DESPI_BIN_PATH/jdbg merge -o database.jdb.tmp -T $TRANSIT_TAXONOMY_TREE_PATH mer_counts_* && touch .jf.merge
+			else
+				if [ -f "mer_counts_0" ]
+				then
+					mv mer_counts_0 database.jdb.tmp && touch .jf.merge
+				else
+					echo "Fail to use jdbg generate kmers"
+					exit 1
+				fi
+			fi
+			
+			if [ -f "database.jdb.tmp" ]
+			then	
+				mv database.jdb.tmp ../database.jdb && touch ../jdbg.complete && rm -f .jf.merge .jf.gen
+				echo "finish generating kmers"
+			else
+				echo "Fail to generate kmers"
+				exit 1
+			fi
+		fi
+		cd ..
+		rm -rf $TRANSIT
+	else 
+		echo "found database.jdb"		
+	fi
+	#if [ -f "$DESPI_BIN_PATH/deSPI-sort" ]
+	#then
+		#echo "sorting kmers......"
+		#$DESPI_BIN_PATH/deSPI-sort database.jdb $KMER_SIZE >/dev/null 2>/dev/null
+		#rm -f database.jdb
+	#else
+		#echo "deSPI-index requires deSPI-sort"
+		#exit 1
+	#fi
+	
+	echo "building deSPI index......"
+	if [ -f database.jdb ]
+	then
+		$DESPI_BIN_PATH/deSPI index database.jdb $TAXONOMY_TREE_PATH $REFERENCE_PATH $INDEX_DIR >/dev/null 2>/dev/null
+		$DESPI_BIN_DIR/convert2map	$TAXONOMY_TREE_PATH species > $INDEX_DIR/map
+	fi
+	rm -f database.srt ksp.srt
+	
+	echo "finished building deSPI index ^_^"
+else 
+	echo "jdbg or deSPI missing error, re-download deSPI package to find"
+	exit 1
+fi	
+
+cd ..
+
+
+

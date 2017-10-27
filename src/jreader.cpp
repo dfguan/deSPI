@@ -15,11 +15,48 @@
 //
 // =====================================================================================
 #include "jreader.hpp"
+
 JReader::JReader(string filename_str, string mode, size_t size) 
 {
   open_file(filename_str, mode, size);
 }
 
+void JReader::open_file(string filename_str, string mode, size_t size) 
+{
+	const char *filename = filename_str.c_str();
+	
+	Input_DB_filename = filename_str;
+	
+	FILE *fp = fopen(filename, mode.c_str());
+	if (!fp) {
+		fprintf(stderr, "Fail to open file, Please check file path\n");
+		exit(1);	
+	}
+	char data[1024];
+
+	char *DATABASE_FILE_TYPE = "JFLISTDN";
+	
+	char *fptr = data;
+	
+	fread(data, sizeof(char), JR_HEADER_DATA_SIZE, fp);	
+	
+	if (strncmp(fptr, DATABASE_FILE_TYPE, strlen(DATABASE_FILE_TYPE))) {
+		fprintf(stderr," not in proper format\n");
+		exit(1);
+	}
+	
+	memcpy(&key_bits, fptr + 8, 8);
+	memcpy(&val_len, fptr + 16, 8);
+	memcpy(&key_ct, fptr + 48, 8);
+	//if (val_len != 4) {
+		//fprintf(stderr,"can only handle 4 byte DB values\n");
+		//exit(1);
+	//}
+	k = key_bits / 2;
+	key_len = key_bits / 8 + !! (key_bits % 8);
+	fclose(fp);
+}
+/*  
 void JReader::open_file(string filename_str, string mode, size_t size) 
 {
 	const char *filename = filename_str.c_str();
@@ -66,13 +103,14 @@ void JReader::open_file(string filename_str, string mode, size_t size)
 	memcpy(&key_bits, fptr + 8, 8);
 	memcpy(&val_len, fptr + 16, 8);
 	memcpy(&key_ct, fptr + 48, 8);
-	if (val_len != 4) {
-		fprintf(stderr,"can only handle 4 byte DB values\n");
-		exit(1);
-	}
+	//if (val_len != 4) {
+		//fprintf(stderr,"can only handle 4 byte DB values\n");
+		//exit(1);
+	//}
 	k = key_bits / 2;
 	key_len = key_bits / 8 + !! (key_bits % 8);
 }
+*/
 
 string transIntoChars(uint64_t v, uint8_t len) 
 {

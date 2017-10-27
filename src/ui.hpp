@@ -26,13 +26,14 @@ using namespace std;
 
 typedef struct options {
 	bool isClassify;
+	bool isPaired;
 	uint8_t kmer;
 	string sortedKmer;
 	string gids;
 	string tids;
 	string ref;
 	string output;
-
+	
 	string lib;
 	uint8_t seed;
 	int inv;
