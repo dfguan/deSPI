@@ -59,7 +59,7 @@ then
 			cd $(dirname $REFERENCE_PATH)
 			abs_path=$(pwd)
 			cd $cur_dir
-			sed "s/^/$abs_path&/g" $REFERENCE_PATH > $ABOREFPATH
+			sed "s#^#$abs_path&#g" $REFERENCE_PATH > $ABOREFPATH
 		else
 			cp $REFERENCE_PATH $ABOREFPATH 
 		fi	
@@ -85,20 +85,20 @@ then
 		
 		TRANSIT_DESPI_BIN_PATH=$DESPI_BIN_PATH
 		TRANSIT_TAXONOMY_TREE_PATH=$TAXONOMY_TREE_PATH
-		TRANSIT_REFERENCE_PATH=$REFERENCE_PATH
+		TRANSIT_REFERENCE_PATH=$ABOREFPATH
 		
-		if [ ! "${DESPI_BIN_PATH:0:1}" == "/" ]
+		if [ ! "${TRANSIT_DESPI_BIN_PATH:0:1}" == "/" ]
 		then
-			TRANSIT_DESPI_BIN_PATH="../$DESPI_BIN_PATH"
+			TRANSIT_DESPI_BIN_PATH="../$TRANSIT_DESPI_BIN_PATH"
 		fi	
 		
-		if [ ! "${TAXONOMY_TREE_PATH:0:1}" == "/" ]
+		if [ ! "${TRANSIT_TAXONOMY_TREE_PATH:0:1}" == "/" ]
 		then
-			TRANSIT_TAXONOMY_TREE_PATH="../$TAXONOMY_TREE_PATH"
+			TRANSIT_TAXONOMY_TREE_PATH="../$TRANSIT_TAXONOMY_TREE_PATH"
 		fi	
-		if [ ! "${REFERENCE_PATH:0:1}" == "/" ]
+		if [ ! "${TRANSIT_REFERENCE_PATH:0:1}" == "/" ]
 		then
-			TRANSIT_REFERENCE_PATH="../$REFERENCE_PATH"
+			TRANSIT_REFERENCE_PATH="../$TRANSIT_REFERENCE_PATH"
 		fi	
 		
 		if [ ! -f database.jdb ]
@@ -106,8 +106,8 @@ then
 			if [ ! -f "mer_counts_0" ]
 			then
 				echo "generating kmers, hash size:$JELLYFISH_HASH_SIZE"
-				"$TRANSIT_DESPI_BIN_PATH"/jdbg count -m $KMER_SIZE -s $JELLYFISH_HASH_SIZE -t 4 -C -T $TRANSIT_TAXONOMY_TREE_PATH $ABOREFPATH
-				rm -f $ABOREFPATH
+				"$TRANSIT_DESPI_BIN_PATH"/jdbg count -m $KMER_SIZE -s $JELLYFISH_HASH_SIZE -t 4 -C -T $TRANSIT_TAXONOMY_TREE_PATH $TRANSIT_REFERENCE_PATH
+				rm -f $TRANSIT_REFERENCE_PATH
 			fi
 
 			if [ -e "mer_counts_1" ]

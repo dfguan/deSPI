@@ -46,14 +46,13 @@ WHEN USING database refseq OR genbank:
 ```
 #### deSPI-index
 ```
-deSPI-index <REF_DIR> <KMER_SIZE> <NODE_PATH> <DESPI_BIN_DIR> <INDEX_DIR>
+deSPI-index <TID_REF_MAP> <NODE_PATH> <DESPI_BIN_DIR> <INDEX_DIR>
 
 ARGUMENT
-    <REF_DIR>                directory of reference library.
-    <KMER_SIZE>              the k-mer size of reference de Bruijin (RdBG) to be indexed
+    <TID_REF_MAP>            map file list reference path and its taxonomy id.
     <NODE_PATH>              location of nodes.dmp file.
-    <DESPI_BIN_DIR>          directory of deSPI executive files.
-    <INDEX_DIR>              directory to store the reference index file of deSPI.
+    <DESPI_BIN_DIR>          directory of deSPI execuative files.
+    <INDEX_DIR>              directory to store deSPI's index.
 ``` 
 #### deSPI 
 ```
@@ -94,7 +93,7 @@ After creating a reference library, the reference index can be constructed by th
 ```
 cd deSPI
 
-bin/deSPI-index LOCAL_REF_DIR taxonmy/nodes.dmp bin INDEX_DIR
+bin/deSPI-index  $LOCAL_REF_DIR/ref2tid.map taxonomy/nodes.dmp bin INDEX_DIR
 
 ```
 ---
