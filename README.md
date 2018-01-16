@@ -11,7 +11,7 @@ cd ..
 
 ./deSPI-download -o taxonomy taxonomy  
 
-./deSPI-index test/refs/ taxonomy/nodes.dmp bin index
+./deSPI-index test/refs/ref2tid.map taxonomy/nodes.dmp bin index
 
 bin/deSPI classify index test/reads/reads.fa >Labels
 ```
@@ -67,7 +67,7 @@ Options:   -s, --seed_len      <uint8_t>          lower bound of seed length [30
 
 ### Memory Requirements
 
-The memory footprint of deSPI is relatively small for read classification, e.g., using the 1742 RefSeq complete genomes as reference, deSPI requires 11 gigabytes to classify the input reads. However, it is worthnoting that, deSPI requires relatively large memory to construct the reference index, e.g., it requires over 100 gigabytes to construct the index of RefSeq complete genomes. This is mainly due to the index construction of deSPI is still under optimization.The memory footprint will be much lower in the later version.
+The memory footprint of deSPI is relatively small for read classification, e.g., using the 12274 RefSeq complete genomes (5975 bacterial, 219 archaea, 6080 viral genomes) as reference, deSPI requires 25 gigabytes to classify the input reads. However, it is worthnoting that, deSPI requires relatively large memory to construct the reference index, e.g., it requires over 100 gigabytes to construct the index of RefSeq complete genomes. This is mainly due to the index construction of deSPI is still under optimization.The memory footprint will be much lower in the later version.
 
 To make it easier to use, we provide a pre-built index of  RefSeq complete genomes, which is available at:
 https://drive.google.com/open?id=0Bwibkj8plEJrSExWMm1LcXFWNnc
@@ -89,7 +89,7 @@ DATABSE includes refseq, genbank, taxonomy
 
 
 #### Index construction
-After creating a reference library, the reference index can be constructed by the following command. It is worthnoting that deSPI needs nodes.dmp as input, nodes.dmp requires be downloaded in advance (with the deSPI-download command mentioned above).
+After creating a reference library, the reference index can be constructed by the following command. Since deSPI needs nodes.dmp as input, nodes.dmp requires be downloaded in advance (recommend to use deSPI-download).
 ```
 cd deSPI
 
@@ -130,4 +130,4 @@ https://drive.google.com/open?id=0Bwibkj8plEJrSExWMm1LcXFWNnc
 ---
 
 ### Contact
-For advising, bug reporting and requiring help, please contact ydwang@hit.edu.cn 
+For advising, bug reporting and requiring help, please contact dfguan@hit.edu.cn 

@@ -1,13 +1,14 @@
 #!/bin/bash
 # 
-#Author: Florian Breitwieser
-#Script: centrifuge-download
+#Original Author: Florian Breitwieser
+#Original Script: centrifuge-download
 #Site: https://github.com/infphilo/centrifuge/blob/master/centrifuge-download
 #Revised by Dengfeng Guan
 #Email: dfguan@hit.edu.cn
+#Please feel free to contact me if there are problems in the script 
 
 set -eu -o pipefail
-
+#set -x
 exists() {
   command -v "$1" >/dev/null 2>&1
 }
@@ -29,12 +30,23 @@ function download_n_process() {
     IFS=$'\t' read -r TAXID FILEPATH <<< "$1"
 
     NAME=`basename $FILEPATH .gz`
+	STOP_SIG="F"
+	# if file exist do nothing
+	# if gz file exist remove it first and redownload file and do the process
+	if [ ! -f "$LIBDIR/$DOMAIN/$NAME" ]
+	then
+			$DL_PROG "$LIBDIR/$DOMAIN/$NAME.gz" "$FILEPATH" || { printf "\nError downloading $FILEPATH!\n" >&2; STOP_SIG="T";}
+			if [ "$STOP_SIG" != "T" ]
+			then
+				gunzip -f "$LIBDIR/$DOMAIN/$NAME.gz" ||{ printf "\nError gunzipping $LIBDIR/$DOMAIN/$NAME.gz [ downloaded from $FILEPATH ]!\n" >&2;STOP_SIG="T";}
+			fi
+			if [ "$STOP_SIG" != "T" ]
+			then
+				echo "$LIBDIR/$DOMAIN/$NAME" "$TAXID" >> $LIBDIR/ref2tid.map
+			fi
 
-    [[ -f "$LIBDIR/$DOMAIN/$NAME.gz" ]] || $DL_PROG "$LIBDIR/$DOMAIN/$NAME.gz" "$FILEPATH" || { printf "\nError downloading $FILEPATH!\n" >&2 && exit 1; }
-    gunzip -f "$LIBDIR/$DOMAIN/$NAME.gz" ||{ printf "\nError gunzipping $LIBDIR/$DOMAIN/$NAME.gz [ downloaded from $FILEPATH ]!\n" >&2 &&  exit 255; }
-    #sed -i "s/^>/>tid|$TAXID|ref|/" $LIBDIR/$DOMAIN/$NAME
-  	echo $NAME $TAXID >>$LIBDIR/"$LIBDIR"_ref2tid.map 
-    echo done
+	fi
+	echo done
 }
 export -f download_n_process
 
@@ -112,7 +124,6 @@ WHEN USING database refseq OR genbank:
  -d <domain>            What domain to download. One or more of ${ALL_GENOMES} (comma separated, required).
  -a <assembly level>    Only download genomes with the specified assembly level ($ALL_ASSEMBLY_LEVELS). Default: '$ASSEMBLY_LEVEL'.
  -c <refseq category>   only download genomes the specified refseq category ($ALL_REFSEQ_CATEGORY).  Default: any.
- -g                     Download GI map.
 "
 
 # arguments: $OPTFIND (current index), $OPTARG (argument for option), $OPTERR (bash-specific)
@@ -137,7 +148,17 @@ shift $((OPTIND-1))
 [[ $# -eq 1 ]] || { printf "$USAGE" >&2 && exit 1; };
 DATABASE=$1
 
-echo $DATABASE
+#get absolute path
+CUR_DIR=$( pwd )
+if [ -d $BASE_DIR ]
+then
+	BASE_DIR=$( cd $BASE_DIR ; pwd ) 
+else
+	echo "$BASE_DIR is not a directory, Exit" >&2
+	exit 1
+fi
+
+#echo $DATABASE
 #### TAXONOMY DOWNLOAD
 FTP="ftp://ftp.ncbi.nih.gov"
 if [[ "$DATABASE" == "taxonomy" ]]; then 
@@ -207,13 +228,13 @@ for DOMAIN in $DOMAINS; do
 
     export DOMAIN=$DOMAIN
     check_or_mkdir_no_fail $LIBDIR/$DOMAIN
-
+	#echo $LIBDIR
     FULL_ASSEMBLY_SUMMARY_FILE="$LIBDIR/$DOMAIN/assembly_summary.txt"
     ASSEMBLY_SUMMARY_FILE="$LIBDIR/$DOMAIN/assembly_summary_filtered.txt"
 
     #echo "Downloading and filtering the assembly_summary.txt file ..." >&2
     $DL_PROG "$FULL_ASSEMBLY_SUMMARY_FILE" ftp://ftp.ncbi.nlm.nih.gov/genomes/$DATABASE/$DOMAIN/assembly_summary.txt > "$FULL_ASSEMBLY_SUMMARY_FILE"
-    echo $AWK_QUERY
+    #echo $AWK_QUERY
     awk -F "\t" "BEGIN {OFS=\"\t\"} $AWK_QUERY" "$FULL_ASSEMBLY_SUMMARY_FILE" > "$ASSEMBLY_SUMMARY_FILE"
 
     N_EXPECTED=`cat "$ASSEMBLY_SUMMARY_FILE" | wc -l`
