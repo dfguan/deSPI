@@ -45,7 +45,7 @@ struct option long_options[] = {
 
 UI::UI(opts *opt)
 {
-	opt->seed = 30;
+	opt->seed = 24;
 	opt->kmer = 31;
 	//opt->inv = 5;
 	opt->num_threads = 1;
@@ -87,10 +87,10 @@ int UI::classify_usage()
         
         fprintf(stderr, "Options:   -s, --seed_len      <uint8_t>          lower bound of seed length [30]\n"); 
         fprintf(stderr, "           -t, --threads       <int>              number of threads [1]\n");
-	fprintf(stderr, "           -r, --max_it        <uint8_t>          maximal iteration times [4]\n");
-	fprintf(stderr, "           -i, --interv        <int8_t>           minimal distance between seeds [5]\n");
-	//fprintf(stderr, "           -p, --paired        <int8_t>           minimal distance between seeds [5]\n");
-	fprintf(stderr, "           -h, --help                             help\n");
+	//fprintf(stderr, "           -r, --max_it        <uint8_t>          maximal iteration times [4]\n");
+		fprintf(stderr, "           -i, --seed_step     <int8_t>           seed step size [4]\n");
+		fprintf(stderr, "           -p, --paired        <int8_t>           set for paired end reads [False]\n");
+		fprintf(stderr, "           -h, --help                             help\n");
         fprintf(stderr, "\n"); 
 	return ERROR_PARSE_PARAMS;
 
