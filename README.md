@@ -20,7 +20,7 @@ bin/deSPI classify index test/reads/reads.fa >Labels
 
 ### Introduction
 
-deSPI is a novel read classification tool which classifies reads by recognizing and analyzing the matches between reads and reference with de Bruijin graph-based lightweight reference indexing.
+deSPI is a novel metagenomics reads classification tool which classifies reads by recognizing and analyzing short exact matches between reads and references with de Bruijin graph-based lightweight reference indexing.
  
 deSPI is mainly designed by Dr. Bo Liu and developed by Mr. Dengfeng Guan with the supervision of Prof. Yadong Wang in Center for Bioinformatics, Harbin Institute of Technology, China.
 
@@ -56,13 +56,17 @@ ARGUMENT
 ``` 
 #### deSPI 
 ```
-Usage:     deSPI classify [Options] <IndexDir> <ReadFiles>
+Usage:     deSPI  classify  [Options] <IndexDir> <ReadFiles>
 
-<IndexDir>             directory to store the reference index file of deSPI
-<ReadFiles>            reads files to process, in FASTQ/FASTA format (separated by space)
-Options:   -s, --seed_len      <uint8_t>          lower bound of seed length [30]
-           -t, --threads       <int>              # of threads [1]
+<IndexDir>              the directory of index
+<ReadFiles>             reads files, in FASTQ/FASTA format (separated by space)
+
+Options:   -s, --seed_len      <uint8_t>          lower bound of seed length from 24 [24]
+           -t, --threads       <int>              number of threads [1]
+           -i, --seed_step     <int8_t>           seed step size [4]
+           -p, --paired        <int8_t>           set for paired end reads [False]
            -h, --help                             help
+
 ```
 
 ### Memory Requirements
@@ -124,9 +128,7 @@ indicates that the Sequence "ERR636248.35" is assigned to taxononmy ID 177416, a
 ---
 
 ### Real sequencing and Simulated datasets
-We benchmarked deSPI with two 'pseudo' real metagenome datasets respectively prduced by Illumina HiSeq and MiSeq platforms. Each of them consists of 20 datasets (50,000 reads per datasets). And we also used RefSeq genomes to generate a simulated dataset, we used Mason simulator to produce 1 million 100 bp Illumina-like reads. All datasets are available at:
-https://drive.google.com/open?id=0Bwibkj8plEJrSExWMm1LcXFWNnc
-
+We benchmarked deSPI with mainly three experiments, including a simulated dataset test (20 million reads in total), 559 real sequencing datasets test and a real metagenomics dataset from human gut. 
 ---
 
 ### Contact

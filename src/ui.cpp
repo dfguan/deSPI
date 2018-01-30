@@ -85,7 +85,7 @@ int UI::classify_usage()
         fprintf(stderr, "<IndexDir>              the directory contains deSPI index\n");
         fprintf(stderr, "<ReadFiles>             reads files, in FASTQ/FASTA format (separated by space)\n\n");
         
-        fprintf(stderr, "Options:   -s, --seed_len      <uint8_t>          lower bound of seed length [30]\n"); 
+        fprintf(stderr, "Options:   -s, --seed_len      <uint8_t>          lower bound of seed length from 24 [24]\n"); 
         fprintf(stderr, "           -t, --threads       <int>              number of threads [1]\n");
 	//fprintf(stderr, "           -r, --max_it        <uint8_t>          maximal iteration times [4]\n");
 		fprintf(stderr, "           -i, --seed_step     <int8_t>           seed step size [4]\n");
