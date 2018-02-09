@@ -463,7 +463,7 @@ int bwt::exactMatch(uint8_t *bytes, int len, int& match_len, uint32_t* assignedT
 
 }
 //load bwt and taxonID
-int bwt::load_info(const char *dirPath)
+int bwt::load_index(const char *dirPath)
 {
 	//fprintf(stderr,"%s",dirPath);	
 	string bwtFilePath(dirPath);
@@ -554,7 +554,7 @@ uint8_t countZero(uint64_t v)
 	}
 	return counter;
 }
-int bwt::write_info(const char *dirPath)
+int bwt::dump_index(const char *dirPath)
 {
 	
 	string bwtFilePath(dirPath);
@@ -579,38 +579,42 @@ int bwt::write_info(const char *dirPath)
 	//here combine occ and bwt_str
 	uint32_t bufferSize = 168 << 8;
       	
-	uint8_t *buffer = new uint8_t[bufferSize + 5]; // just ensure that buffer is long enough acutally it won't surpass buffersize + 2
+	uint8_t *buffer = new uint8_t[bufferSize + 5]; // ensure that buffer is long enough acutally it won't surpass buffersize + 2
 
-	
+	if (buffer == NULL) {
+		fprintf(stderr, "Fail to allocate space, exit \n");
+		exit(1);
+	}	
 	//uint64_t theEnd = (len_bwt_str >> 8 );
-	fprintf(stderr,"eere\n");	
+	fprintf(stderr,"start to dump bwt idx to disk\n");	
+	uint64_t occCount = ((len_bwt_str + 255)>>8)*5;
 	uint64_t byteLen = ((len_bwt_str + 1) >> 1) + 2 + (occCount << 3);
 	
 	fwrite(&byteLen, 8, 1, bwt_fp);
 
 	uint64_t leftOneChar = len_bwt_str & 0x1;
 	
-	fprintf(stderr,"eere1\n");	
 	uint32_t bufferPoint = 0;
 	
 	//uint8_t fillOcc = 0;
 	
-	uint64_t occPoint = 0;
-
+	uint64_t occCheck[] = {0,0,0,0,0};	
 	for(uint64_t i=0; i< len_bwt_str - leftOneChar; i += 2) {
 
 		if (0 == (i&0xFF)) {
 			//fprintf(stderr,"%u\n",bufferPoint);
 			for(uint8_t j=0; j< 5; ++j) {
-				memcpy((uint64_t *)(buffer + bufferPoint),occCheck+occPoint*5 + j, sizeof(uint64_t));
+				memcpy((uint64_t *)(buffer + bufferPoint),occCheck + j, sizeof(uint64_t));
 				bufferPoint += 8;	
 			}
-			++occPoint;
 		}
+		//each character takes 4 bits
+		++occCheck[Bit2[bwt_str[i]]];
+		++occCheck[Bit2[bwt_str[i+1]]];
+	
 		buffer[bufferPoint++] = (Bit2[bwt_str[i+1]]<<4)|(Bit2[bwt_str[i]]);
 
 		if (bufferPoint >= bufferSize) {
-			//fprintf(stderr,"%lu\n",i);
 			fwrite(buffer, sizeof(uint8_t), bufferSize, bwt_fp);
 			bufferPoint = 0;
 		}  
@@ -618,13 +622,13 @@ int bwt::write_info(const char *dirPath)
 	
 	if (leftOneChar) {
 		buffer[bufferPoint++] = 0xF0|Bit2[bwt_str[len_bwt_str-1]];
+		++occCheck[Bit2[bwt_str[len_bwt_str-1]]];
 	} 
 	
 	buffer[bufferPoint++] = 0xFF;
 	buffer[bufferPoint++] = 0xFF;
 
 	fwrite(buffer,sizeof(uint8_t), bufferPoint, bwt_fp);
-	fprintf(stderr,"texst\n");
 	/*
       	fwrite(&len_bwt_str, 8, 1, bwt_fp);
 
@@ -637,6 +641,8 @@ int bwt::write_info(const char *dirPath)
 
 	fwrite(occCheck, sizeof(uint64_t),occCount,bwt_fp);
 	*/
+	rank[0] = occCheck[4];
+	for (uint8_t i=1; i<5; ++i) rank[i] = rank[i-1] + occCheck[i-1];
 	fwrite(rank, sizeof(uint64_t),5,bwt_fp);	
 	//*table_len = bwt_len;
 	
@@ -646,160 +652,164 @@ int bwt::write_info(const char *dirPath)
 
 	//p_nkmerTID = new uint32_t[bwt_len];
 	uint64_t AGCTCounterSize = (1 << 16) * 5;
-	fprintf(stderr,"%lutexst1\n",AGCTCounterSize);
-	if (AGCTCounter != NULL) fprintf(stderr,"haha\n");
-	AGCTCounter = new uint8_t[AGCTCounterSize];
-	fprintf(stderr,"texst33\n");
-	if (AGCTCounter == NULL) fprintf(stderr, "zuile\n");
-
 	fwrite(&AGCTCounterSize, 8, 1, bwt_fp);
+	//fprintf(stderr,"%lutexst1\n",AGCTCounterSize);
+	//if (AGCTCounter != NULL) fprintf(stderr,"haha\n");
+	//fprintf(stderr,"texst33\n");
 	uint64_t mask[] = {0, 0x1111, 0x2222, 0x3333, 0x4444};
-
-	for (uint64_t i=0; i <= 0xFFFF; ++i) {
-		for (uint8_t j=0; j < 5; ++j) AGCTCounter[i*5 + j] = countZero(i^mask[j]);	
-	}
+	AGCTCounter = new uint8_t[AGCTCounterSize];
+	if (AGCTCounter == NULL) {
+		uint8_t ACGT_Array[] = {0,0,0,0,0};
+		for (uint64_t i=0; i <= 0xFFFF; ++i) {
+			for (uint8_t j=0; j < 5; ++j) {
+				ACGT_Array[j] = countZero(i^mask[j]);
+			}	
+			fwrite(ACGT_Array, sizeof(uint8_t), 5, bwt_fp);
+		}
+	} else {
+		for (uint64_t i=0; i <= 0xFFFF; ++i) {
+			for (uint8_t j=0; j < 5; ++j) AGCTCounter[i*5 + j] = countZero(i^mask[j]);	
+		}
+		fwrite(AGCTCounter, sizeof(uint8_t), AGCTCounterSize, bwt_fp);
+	} 
 	
-	fwrite(AGCTCounter, sizeof(uint8_t), AGCTCounterSize, bwt_fp);
-	
-	fprintf(stderr,"texst2\n");
-
+	fprintf(stderr,"finish dumping bwt index to disk\n");
+	fprintf(stderr,"start dumping SA to disk\n");
 	fwrite(&tidSize, sizeof(uint64_t), 1, tid_fp );
 
 	fwrite(taxonIDTab, sizeof(uint32_t), tidSize, tid_fp);
 	
-	fprintf(stderr,"\n");
+	fprintf(stderr,"finish dumping SA to disk\n");
 
 	fclose(bwt_fp);
 	fclose(tid_fp);
 	
 	return NORMAL_EXIT;
-
 }
 
-int bwt::write_info(const char *dirPath, vector<uint32_t>& p_nkmerTID)
-{
+//int bwt::dump_index(const char *dirPath, vector<uint32_t>& p_nkmerTID)
+//{
 	
-	string bwtFilePath(dirPath);
-	string tidFIlePath(dirPath);
-	if (bwtFilePath[bwtFilePath.length()-1] == '/') {
-		bwtFilePath += "despi.bwt";
-		tidFIlePath += "despi.tid";
+	//string bwtFilePath(dirPath);
+	//string tidFIlePath(dirPath);
+	//if (bwtFilePath[bwtFilePath.length()-1] == '/') {
+		//bwtFilePath += "despi.bwt";
+		//tidFIlePath += "despi.tid";
 	
-	} else {
-		bwtFilePath += "/despi.bwt";
-		tidFIlePath += "/despi.tid";
+	//} else {
+		//bwtFilePath += "/despi.bwt";
+		//tidFIlePath += "/despi.tid";
 
-	}
+	//}
 	
-	FILE *bwt_fp = fopen(bwtFilePath.c_str(), "wb");
-	FILE *tid_fp = fopen(tidFIlePath.c_str(), "wb");
+	//FILE *bwt_fp = fopen(bwtFilePath.c_str(), "wb");
+	//FILE *tid_fp = fopen(tidFIlePath.c_str(), "wb");
 
-	if (NULL == bwt_fp || NULL == tid_fp)
-		return FILE_OPEN_ERROR;
+	//if (NULL == bwt_fp || NULL == tid_fp)
+		//return FILE_OPEN_ERROR;
 	
 	
 	//here combine occ and bwt_str
-	uint32_t bufferSize = 168 << 8;
-      	
-	uint8_t *buffer = new uint8_t[bufferSize + 5]; // just ensure that buffer is long enough acutally it won't surpass buffersize + 2
+	//uint32_t bufferSize = 168 << 8;
+          
+	//uint8_t *buffer = new uint8_t[bufferSize + 5]; // just ensure that buffer is long enough acutally it won't surpass buffersize + 2
 
 	
 	//uint64_t theEnd = (len_bwt_str >> 8 );
-	fprintf(stderr,"eere\n");	
-	uint64_t byteLen = ((len_bwt_str + 1) >> 1) + 2 + (occCount << 3);
+	//fprintf(stderr,"eere\n");	
+	//uint64_t byteLen = ((len_bwt_str + 1) >> 1) + 2 + (occCount << 3);
 	
-	fwrite(&byteLen, 8, 1, bwt_fp);
+	//fwrite(&byteLen, 8, 1, bwt_fp);
 
-	uint64_t leftOneChar = len_bwt_str & 0x1;
+	//uint64_t leftOneChar = len_bwt_str & 0x1;
 	
-	fprintf(stderr,"eere1\n");	
-	uint32_t bufferPoint = 0;
+	//fprintf(stderr,"eere1\n");	
+	//uint32_t bufferPoint = 0;
 	
 	//uint8_t fillOcc = 0;
 	
-	uint64_t occPoint = 0;
+	//uint64_t occPoint = 0;
 
-	for(uint64_t i=0; i< len_bwt_str - leftOneChar; i += 2) {
-
-		if (0 == (i&0xFF)) {
+	//for(uint64_t i=0; i< len_bwt_str - leftOneChar; i += 2) {
+		//if (0 == (i&0xFF)) {
 			//fprintf(stderr,"%u\n",bufferPoint);
-			for(uint8_t j=0; j< 5; ++j) {
-				memcpy((uint64_t *)(buffer + bufferPoint),occCheck+occPoint*5 + j, sizeof(uint64_t));
-				bufferPoint += 8;	
-			}
-			++occPoint;
-		}
-		buffer[bufferPoint++] = (Bit2[bwt_str[i+1]]<<4)|(Bit2[bwt_str[i]]);
+			//for(uint8_t j=0; j< 5; ++j) {
+				//memcpy((uint64_t *)(buffer + bufferPoint),occCheck+occPoint*5 + j, sizeof(uint64_t));
+				//bufferPoint += 8;	
+			//}
+			//++occPoint;
+		//}
+		//buffer[bufferPoint++] = (Bit2[bwt_str[i+1]]<<4)|(Bit2[bwt_str[i]]);
 
-		if (bufferPoint >= bufferSize) {
+		//if (bufferPoint >= bufferSize) {
 			//fprintf(stderr,"%lu\n",i);
-			fwrite(buffer, sizeof(uint8_t), bufferSize, bwt_fp);
-			bufferPoint = 0;
-		}  
-	}
+			//fwrite(buffer, sizeof(uint8_t), bufferSize, bwt_fp);
+			//bufferPoint = 0;
+		//}  
+	//}
 	
-	if (leftOneChar) {
-		buffer[bufferPoint++] = 0xF0|Bit2[bwt_str[len_bwt_str-1]];
-	} 
+	//if (leftOneChar) {
+		//buffer[bufferPoint++] = 0xF0|Bit2[bwt_str[len_bwt_str-1]];
+	//} 
 	
-	buffer[bufferPoint++] = 0xFF;
-	buffer[bufferPoint++] = 0xFF;
+	//buffer[bufferPoint++] = 0xFF;
+	//buffer[bufferPoint++] = 0xFF;
 
-	fwrite(buffer,sizeof(uint8_t), bufferPoint, bwt_fp);
-	fprintf(stderr,"texst\n");
-	/*
-      	fwrite(&len_bwt_str, 8, 1, bwt_fp);
+	//fwrite(buffer,sizeof(uint8_t), bufferPoint, bwt_fp);
+	//fprintf(stderr,"end dumping bwt...\n");
+	
+          //fwrite(&len_bwt_str, 8, 1, bwt_fp);
 
 	//p_bwt_s  = new char [bwt_len];
-	fprintf(stderr,"1\n");
+	//fprintf(stderr,"1\n");
 
-	fwrite(bwt_str, sizeof(char), len_bwt_str, bwt_fp);
+	//fwrite(bwt_str, sizeof(char), len_bwt_str, bwt_fp);
 	
-	fwrite(&occCount, 8, 1, bwt_fp);
+	//fwrite(&occCount, 8, 1, bwt_fp);
 
-	fwrite(occCheck, sizeof(uint64_t),occCount,bwt_fp);
-	*/
-	fwrite(rank, sizeof(uint64_t),5,bwt_fp);	
+	//fwrite(occCheck, sizeof(uint64_t),occCount,bwt_fp);
+	//*/
+	//fprintf(stderr, "start to dump SA...\n");	
+	//fwrite(rank, sizeof(uint64_t),5,bwt_fp);	
 	//*table_len = bwt_len;
+	//uint64_t hash_index_size = (uint64_t)1 <<((PREINDEXLEN<<1) + 1);
 	
-	uint64_t hash_index_size = (uint64_t)1 <<((PREINDEXLEN<<1) + 1);
-	
-	fwrite(hash_index,sizeof(uint64_t),hash_index_size,bwt_fp);
+	//fwrite(hash_index,sizeof(uint64_t),hash_index_size,bwt_fp);
 
 	//p_nkmerTID = new uint32_t[bwt_len];
-	uint64_t AGCTCounterSize = (1 << 16) * 5;
-	fprintf(stderr,"%lutexst1\n",AGCTCounterSize);
-	if (AGCTCounter != NULL) fprintf(stderr,"haha\n");
-	AGCTCounter = new uint8_t[AGCTCounterSize];
-	fprintf(stderr,"texst33\n");
-	if (AGCTCounter == NULL) fprintf(stderr, "zuile\n");
+	//uint64_t AGCTCounterSize = (1 << 16) * 5;
+	//fprintf(stderr,"%lutexst1\n",AGCTCounterSize);
+	//if (AGCTCounter != NULL) fprintf(stderr,"haha\n");
+	//AGCTCounter = new uint8_t[AGCTCounterSize];
+	//fprintf(stderr,"texst33\n");
+	//if (AGCTCounter == NULL) fprintf(stderr, "fail to allocate space\n");
 
-	fwrite(&AGCTCounterSize, 8, 1, bwt_fp);
-	uint64_t mask[] = {0, 0x1111, 0x2222, 0x3333, 0x4444};
+	//fwrite(&AGCTCounterSize, 8, 1, bwt_fp);
+	//uint64_t mask[] = {0, 0x1111, 0x2222, 0x3333, 0x4444};
 
-	for (uint64_t i=0; i <= 0xFFFF; ++i) {
-		for (uint8_t j=0; j < 5; ++j) AGCTCounter[i*5 + j] = countZero(i^mask[j]);	
-	}
+	//for (uint64_t i=0; i <= 0xFFFF; ++i) {
+		//for (uint8_t j=0; j < 5; ++j) AGCTCounter[i*5 + j] = countZero(i^mask[j]);	
+	//}
 	
-	fwrite(AGCTCounter, sizeof(uint8_t), AGCTCounterSize, bwt_fp);
+	//fwrite(AGCTCounter, sizeof(uint8_t), AGCTCounterSize, bwt_fp);
 	
-	fprintf(stderr,"texst2\n");
-	tidSize = p_nkmerTID.size();
+	//fprintf(stderr,"texst2\n");
+	//tidSize = p_nkmerTID.size();
 
-	fwrite(&tidSize, sizeof(uint64_t), 1, tid_fp );
+	//fwrite(&tidSize, sizeof(uint64_t), 1, tid_fp );
 
-	fwrite(&p_nkmerTID[0], sizeof(uint32_t), tidSize, tid_fp);
+	//fwrite(&p_nkmerTID[0], sizeof(uint32_t), tidSize, tid_fp);
 	
-	fprintf(stderr,"\n");
+	//fprintf(stderr,"\n");
 
-	fclose(bwt_fp);
-	fclose(tid_fp);
+	//fclose(bwt_fp);
+	//fclose(tid_fp);
 	
-	return NORMAL_EXIT;
+	//return NORMAL_EXIT;
 
-}
-
-int bwt::bwt_init()
+//}
+/*
+//int bwt::bwt_init()
 {
 	//256 is interval
 	occCount = ((len_bwt_str + 255)>>8)*5;
@@ -840,11 +850,5 @@ int bwt::bwt_init()
 	//for (uint8_t i=0;i<5;++i) cout<<rank[i]<<endl;
 	//rank[5] = rank[4];			
 	return NORMAL_EXIT;
-
-
-
-
 }
-
-	
-
+*/

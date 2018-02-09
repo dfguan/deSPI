@@ -377,8 +377,9 @@ int processKmers(const char *refListPath, const uint8_t kmerSize,const  char *di
 	pthread_join(thread_2, NULL);
 	
 	isStartNode = &_se_node->isNotSingle[0];
+	fprintf(stderr, "start merging...");
 	mergeKmers("database.srt", kmerSize, _sp_kmers->_kspchar,_sp_kmers->_kspchar_counter, _se_node, c_bwt); 
-	
+	fprintf(stderr, "end merging...");
 	if (_sp_kmers)
 		delete _sp_kmers;
 	if (_se_node)
@@ -544,6 +545,7 @@ int mergeSort(char *fpkmers, const uint8_t _kmer, se_node *_se_,  uint64_t kmers
 {
 
 
+	fprintf(stderr, "merging using disk space...\n");
 	uint64_t tidPtr = c_bwt->tid_ptr;
 	uint64_t ind = c_bwt->bwt_str_ptr;
 	
@@ -719,17 +721,17 @@ int mergeSort(char *fpkmers, const uint8_t _kmer, se_node *_se_,  uint64_t kmers
 			break;
 	
 	} while (true);
-	
 	if (kmersValue) delete[] kmersValue;
 	fclose(fp_spchar);
 	fclose(fp);
+	fprintf(stderr, "end merging with disk space\n");
 	return NORMAL_EXIT;
 
 }
 
 int mergeSort(char *fpkmers, const uint8_t _kmer, se_node *_se_,  kmersSpchar* p_2kmers, uint64_t kmersSpcharN, bwt *c_bwt)
 {
-	
+		
 	uint64_t tidPtr = c_bwt->tid_ptr;
 	uint64_t ind = c_bwt->bwt_str_ptr;
 	
@@ -1562,7 +1564,7 @@ int mergeKmers(char *sortedKmersPath, const uint8_t _kmer_len, kmersSpchar *_ksp
 	if (_kspchar) 	
        		mergeSort(sortedKmersPath,_kmer_len , _se_,  _kspchar, kmersSpcharN, c_bwt);
 	else 
-		mergeSort(sortedKmersPath, _kmer_len, _se_, kmersSpcharN, c_bwt);
+			mergeSort(sortedKmersPath, _kmer_len, _se_, kmersSpcharN, c_bwt);
 	return NORMAL_EXIT;
 }
 

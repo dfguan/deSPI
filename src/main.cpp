@@ -857,9 +857,9 @@ int build_index(opts* p_opt)
 	//fprintf(stdout,"bwtstring:%s\n", bwt_s.c_str());
 	//bwt bt(bwt_s.c_str(), bwt_s.length(),hash_index);
 
-	c_bwt->bwt_init();
+	//c_bwt->bwt_init();
 
-	c_bwt->write_info(dirPath);
+	c_bwt->dump_index(dirPath);
 	
 	return NORMAL_EXIT;
 
@@ -969,7 +969,7 @@ int classify(opts *p_opt)
 	
 	fprintf(stderr,"loading index\n");
 
-	bt->load_info(p_opt->lib.c_str());
+	bt->load_index(p_opt->lib.c_str());
 	
 	taxonTree(taxonomyTreePath.c_str());
 	//map<uint32_t, uint32_t>::iterator it = taxonomyTree.begin();
