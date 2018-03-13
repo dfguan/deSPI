@@ -1194,13 +1194,13 @@ int classify(opts *p_opt)
 		for (int i = 0; i < N_NEEDED; ++i) {
 			kseq_destroy(seqsr+i);
 		}	
-		free(seqsr);
+		if (seqs) free(seqsr);
 	}
 	if (seqs) {
 		for (int i = 0; i < N_NEEDED; ++i) {
 			kseq_destroy(seqs+i);
 		}	
-		free(seqs);
+		if(seqs) free(seqs);
 	}
 	
 	return NORMAL_EXIT;
