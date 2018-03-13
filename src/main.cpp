@@ -861,6 +861,7 @@ int build_index(opts* p_opt)
 
 	c_bwt->dump_index(dirPath);
 	
+	if (c_bwt) delete c_bwt;	
 	return NORMAL_EXIT;
 
 
@@ -1003,8 +1004,8 @@ int classify(opts *p_opt)
 	if (p_opt->isPaired) {
 		seqsr = (kseq_t *) calloc(N_NEEDED, sizeof(kseq_t));
 		if (!seqsr) return MEM_ALLOCATE_ERROR;
-	
-	}	
+	}
+		
 
 	cly_r *results = (cly_r *)calloc(N_NEEDED, sizeof(cly_r));
 
@@ -1098,7 +1099,7 @@ int classify(opts *p_opt)
 					pthread_t *tid = (pthread_t *)calloc(p_opt->num_threads, sizeof(pthread_t));
 					for (int j=0; j < p_opt->num_threads;++j) {
 						//aux[j].trunkNum = average_read_num;
-						//aux[j].seqs_poi = seqs + pointer;
+					//aux[j].seqs_poi = seqs + pointer;
 						//aux[j].res = results + pointer;
 						//pointer += average_read_num;
 						aux[j].n_seqs = n_seqs;
@@ -1112,7 +1113,7 @@ int classify(opts *p_opt)
 					
 					//classify_seq_2(seqs, n_seqs , bt, results );
 					for (int j = 0; j < p_opt->num_threads; ++j) pthread_join(tid[j], 0);
-					free(tid);
+					if (tid) free(tid);
 					output_results(results, n_seqs);
 					total_sequences += n_seqs;
 
@@ -1121,6 +1122,7 @@ int classify(opts *p_opt)
 			}
 		
 		}
+		if (aux) delete []aux;	
 	} else {
 		if (p_opt->isPaired) {
 			if (num_reads % 2 == 0) {
@@ -1188,7 +1190,18 @@ int classify(opts *p_opt)
 
 	//fprintf(stderr,"%f seconds\n",((float)t)/CLOCKS_PER_SEC);
 	if (results) free(results);
-	if (seqs) free(seqs);
+	if (seqsr) {
+		for (int i = 0; i < N_NEEDED; ++i) {
+			kseq_destroy(seqsr+i);
+		}	
+		free(seqsr);
+	}
+	if (seqs) {
+		for (int i = 0; i < N_NEEDED; ++i) {
+			kseq_destroy(seqs+i);
+		}	
+		free(seqs);
+	}
 	
 	return NORMAL_EXIT;
 
