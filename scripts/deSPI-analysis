@@ -140,8 +140,8 @@ def help():
 	print "         stat_type       define style of analysis result. bar or pie"
 	print "         tree_path       path of phylogenetic tree"
 	print "         label_path      path of classification result"
-	print "         num_taxon       display numbers of taxonomy"
-	print "         taxon_level     the taxonomy level used to analysis (genus)"
+	print "         num_taxon       display top N numbers of taxonomy"
+	print "         taxon_level     mapping taxonomy ID of reads to which level (genus)"
 
 
 

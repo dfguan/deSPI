@@ -30,23 +30,11 @@ function download_n_process() {
     IFS=$'\t' read -r TAXID FILEPATH <<< "$1"
 
     NAME=`basename $FILEPATH .gz`
-	STOP_SIG="F"
-	# if file exist do nothing
-	# if gz file exist remove it first and redownload file and do the process
-	if [ ! -f "$LIBDIR/$DOMAIN/$NAME" ]
-	then
-			$DL_PROG "$LIBDIR/$DOMAIN/$NAME.gz" "$FILEPATH" || { printf "\nError downloading $FILEPATH!\n" >&2; STOP_SIG="T";}
-			if [ "$STOP_SIG" != "T" ]
-			then
-				gunzip -f "$LIBDIR/$DOMAIN/$NAME.gz" ||{ printf "\nError gunzipping $LIBDIR/$DOMAIN/$NAME.gz [ downloaded from $FILEPATH ]!\n" >&2;STOP_SIG="T";}
-			fi
-			if [ "$STOP_SIG" != "T" ]
-			then
-				echo "$LIBDIR/$DOMAIN/$NAME" "$TAXID" >> $LIBDIR/ref2tid.map
-			fi
-
-	fi
-	echo done
+    [[ -f "$LIBDIR/$DOMAIN/$NAME.gz" ]] || $DL_PROG "$LIBDIR/$DOMAIN/$NAME.gz" "$FILEPATH" || { printf "\nError downloading $FILEPATH!\n" >&2 && exit 1; }
+    gunzip -f "$LIBDIR/$DOMAIN/$NAME.gz" ||{ printf "\nError gunzipping $LIBDIR/$DOMAIN/$NAME.gz [ downloaded from $FILEPATH ]!\n" >&2 &&  exit 255; }
+    #sed -i "s/^>/>tid|$TAXID|ref|/" $LIBDIR/$DOMAIN/$NAME
+  	echo "$DOMAIN/$NAME" $TAXID >>$LIBDIR/ref2tid.map 
+    echo done
 }
 export -f download_n_process
 
@@ -148,15 +136,6 @@ shift $((OPTIND-1))
 [[ $# -eq 1 ]] || { printf "$USAGE" >&2 && exit 1; };
 DATABASE=$1
 
-#get absolute path
-CUR_DIR=$( pwd )
-if [ -d $BASE_DIR ]
-then
-	BASE_DIR=$( cd $BASE_DIR ; pwd ) 
-else
-	echo "$BASE_DIR is not a directory, Exit" >&2
-	exit 1
-fi
 
 #echo $DATABASE
 #### TAXONOMY DOWNLOAD

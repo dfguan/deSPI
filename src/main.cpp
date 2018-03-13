@@ -1226,7 +1226,7 @@ int main(int argc, char *argv[])
 	//read reads file
 	//output(kmerValue, kmerInfo, _2kmers);
 	
-
+	if (_opt) delete _opt;
 	return NORMAL_EXIT;
 
 }

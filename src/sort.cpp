@@ -731,7 +731,7 @@ int mergeSort(char *fpkmers, const uint8_t _kmer, se_node *_se_,  uint64_t kmers
 
 int mergeSort(char *fpkmers, const uint8_t _kmer, se_node *_se_,  kmersSpchar* p_2kmers, uint64_t kmersSpcharN, bwt *c_bwt)
 {
-		
+	fprintf(stderr, "start merging using memory\n");		
 	uint64_t tidPtr = c_bwt->tid_ptr;
 	uint64_t ind = c_bwt->bwt_str_ptr;
 	
@@ -742,7 +742,7 @@ int mergeSort(char *fpkmers, const uint8_t _kmer, se_node *_se_,  kmersSpchar* p
 	
 	
 	uint64_t kmerNum;
-	uint64_t allocatedNum;
+	uint64_t allocatedNum = 2;
 
 	uint64_t start;
 	uint64_t end;
@@ -752,13 +752,14 @@ int mergeSort(char *fpkmers, const uint8_t _kmer, se_node *_se_,  kmersSpchar* p
 	fread(&kmerNum, sizeof(uint64_t), 1 , fp);
 	
 	//fprintf(stderr,"%lu\n",kmerNum);	
-	allocatedNum = kmerNum << 1;
+	allocatedNum <<= 30; // 
 	uint64_t *kmersValue = NULL;
-	do {
-		kmersValue = new uint64_t[allocatedNum];
+	fprintf(stderr, "break1\n");		
+	while (!kmersValue) {
+		kmersValue = new(std::nothrow) uint64_t[allocatedNum];
 		allocatedNum >>= 1;
-	}while (!kmersValue);
-	
+	}
+	fprintf(stderr, "break2\n");		
 	allocatedNum <<= 1;
 
 	start = 0;
@@ -783,6 +784,7 @@ int mergeSort(char *fpkmers, const uint8_t _kmer, se_node *_se_,  kmersSpchar* p
 	//uint64_t ind = index_start_point;
 	bool isEnd = false;
 	//vector<kmersSpchar>::iterator it = p_2kmers.begin();
+	fprintf(stderr, "break3\n");		
 	for (uint64_t z=0; z<kmersSpcharN; ++z) {
 		kmersSpchar* it = p_2kmers + z; 
 		uint8_t off = it->infor >> 3;
@@ -886,7 +888,9 @@ int mergeSort(char *fpkmers, const uint8_t _kmer, se_node *_se_,  kmersSpchar* p
 	
 	} while (true);
 	
-	if (kmersValue) delete[] kmersValue;
+	fprintf(stderr, "break4\n");		
+	if (kmersValue) delete   []kmersValue;
+	fprintf(stderr, "end merging using memory\n");		
 	return NORMAL_EXIT;
 
 

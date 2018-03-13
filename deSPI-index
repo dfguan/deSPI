@@ -113,11 +113,11 @@ then
 			if [ -e "mer_counts_1" ]
 			then
 				#echo hahahha
-				$TRANSIT_DESPI_BIN_PATH/jdbg merge -o database.jdb.tmp -T $TRANSIT_TAXONOMY_TREE_PATH mer_counts_* && touch .jf.merge
+				$TRANSIT_DESPI_BIN_PATH/jdbg merge -o database.jdb.tmp -T $TRANSIT_TAXONOMY_TREE_PATH mer_counts_* # && touch .jf.merge
 			else
 				if [ -f "mer_counts_0" ]
 				then
-					mv mer_counts_0 database.jdb.tmp && touch .jf.merge
+					mv mer_counts_0 database.jdb.tmp 
 				else
 					echo "Fail to use jdbg generate kmers"
 					exit 1
@@ -126,7 +126,7 @@ then
 			
 			if [ -f "database.jdb.tmp" ]
 			then	
-				mv database.jdb.tmp ../database.jdb && touch ../jdbg.complete && rm -f .jf.merge .jf.gen
+				mv database.jdb.tmp ../database.jdb
 				echo "finish generating kmers"
 			else
 				echo "Fail to generate kmers"
@@ -151,10 +151,10 @@ then
 	echo "building deSPI index......"
 	if [ -f database.jdb ]
 	then
-		$DESPI_BIN_PATH/deSPI index database.jdb $TAXONOMY_TREE_PATH $REFERENCE_PATH $INDEX_DIR >/dev/null 2>/dev/null
+		$DESPI_BIN_PATH/deSPI index database.jdb $TAXONOMY_TREE_PATH $REFERENCE_PATH $INDEX_DIR  >/dev/null 2>/dev/null
 		$DESPI_BIN_DIR/convert2map	$TAXONOMY_TREE_PATH species > $INDEX_DIR/map
 	fi
-	rm -f database.srt ksp.srt
+	#rm -f database.srt ksp.srt
 	
 	echo "finished building deSPI index ^_^"
 else 
