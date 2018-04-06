@@ -57,7 +57,7 @@
 	static inline void ks_destroy(kstream_t *ks)					\
 	{																\
 		if (ks) {													\
-			free(ks->buf);											\
+			if (ks->buf) free(ks->buf);											\
 			free(ks);												\
 		}															\
 	}
@@ -157,7 +157,10 @@ typedef struct __kstring_t {
 	static inline void kseq_destroy(kseq_t *ks)							\
 	{																	\
 		if (!ks) return;												\
-		free(ks->name.s); free(ks->comment.s); free(ks->seq.s);	free(ks->qual.s); \
+		if (ks->name.s) free(ks->name.s);                               \
+		if (ks->comment.s) free(ks->comment.s);                        \
+		if (ks->seq.s) free(ks->seq.s);	                               \
+		if (ks->qual.s) free(ks->qual.s);                              \
 		ks_destroy(ks->f);												\
 		free(ks);														\
 	}
