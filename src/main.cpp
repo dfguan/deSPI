@@ -1190,18 +1190,18 @@ int classify(opts *p_opt)
 
 	//fprintf(stderr,"%f seconds\n",((float)t)/CLOCKS_PER_SEC);
 	if (results) free(results);
-	if (seqsr) {
-		for (int i = 0; i < N_NEEDED; ++i) {
-			kseq_destroy(seqsr+i);
-		}	
-		if (seqs) free(seqsr);
-	}
-	if (seqs) {
-		for (int i = 0; i < N_NEEDED; ++i) {
-			kseq_destroy(seqs+i);
-		}	
-		if(seqs) free(seqs);
-	}
+	//if (seqsr) {
+		//for (int i = 0; i < N_NEEDED; ++i) {
+			//kseq_destroy(seqsr+i);
+		//}	
+		//if (seqs) free(seqsr);
+	//}
+	//if (seqs) {
+		//for (int i = 0; i < N_NEEDED; ++i) {
+			//kseq_destroy(seqs+i);
+		//}	
+		//if(seqs) free(seqs);
+	//}
 	
 	return NORMAL_EXIT;
 
