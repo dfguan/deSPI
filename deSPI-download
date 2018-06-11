@@ -33,7 +33,7 @@ function download_n_process() {
     [[ -f "$LIBDIR/$DOMAIN/$NAME.gz" ]] || $DL_PROG "$LIBDIR/$DOMAIN/$NAME.gz" "$FILEPATH" || { printf "\nError downloading $FILEPATH!\n" >&2 && exit 1; }
     gunzip -f "$LIBDIR/$DOMAIN/$NAME.gz" ||{ printf "\nError gunzipping $LIBDIR/$DOMAIN/$NAME.gz [ downloaded from $FILEPATH ]!\n" >&2 &&  exit 255; }
     #sed -i "s/^>/>tid|$TAXID|ref|/" $LIBDIR/$DOMAIN/$NAME
-  	echo "$DOMAIN/$NAME" $TAXID >>$LIBDIR/ref2tid.map 
+  	echo "$LIBDIR/$DOMAIN/$NAME" $TAXID >>$LIBDIR/ref2tid.map 
     echo done
 }
 export -f download_n_process
@@ -162,7 +162,7 @@ fi
 
 #### REFSEQ/GENBANK DOWNLOAD
 
-export LIBDIR="$BASE_DIR"
+export LIBDIR=$(readlink -f $BASE_DIR)
 #export CHANGE_HEADER="$CHANGE_HEADER"
 
 ## Fields in the assembly_summary.txt file
