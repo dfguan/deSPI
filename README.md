@@ -54,7 +54,7 @@ ARGUMENT
     <DESPI_BIN_DIR>          directory of deSPI execuative files.
     <INDEX_DIR>              directory to store deSPI's index.
 ``` 
-#### deSPI 
+#### deSPI classify 
 ```
 Usage:     deSPI  classify  [Options] <IndexDir> <ReadFiles>
 
@@ -66,7 +66,18 @@ Options:   -s, --seed_len      <uint8_t>          lower bound of seed length fro
            -i, --seed_step     <int8_t>           seed step size [4]
            -p, --paired        <int8_t>           set for paired end reads [False]
            -h, --help                             help
+```
 
+#### deSPI view 
+```
+Usage:     deSPI  view  [Options] <IndexDir> 
+
+<IndexDir>              the directory of index
+
+Options:   -x, --taxid      <uint32_t>+          extract unitigs corresponding to the taxonomy id, use 
+                                                 comma to join mulitple taxids. If not given output 
+                                                 all unitigs 
+           -h, --help                            help
 ```
 
 ### Memory Requirements
