@@ -7,7 +7,7 @@ LDFLAGS = -lz -lm -lpthread
 
 #SOURCES_SORT = sort.cpp jreader.cpp
 #SOURCES_DEB = debruijin.cpp 
-SOURCES = sort.cpp bwt.cpp main.cpp ui.cpp jreader.cpp special_kmers.cpp
+SOURCES = index.cpp bwt.cpp main.cpp ui.cpp jreader.cpp special_kmers.cpp view.cpp
 
 #OBJECTS_SORT = $(SOURCES_SORT:.cpp=.o)
 #OBJECTS_DEB = $(SOURCES_DEB:.cpp=.o)

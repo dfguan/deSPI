@@ -16,9 +16,11 @@
 
 #include <sys/time.h>
 #include <pthread.h>
-#include "sort.hpp"
+#include "index.hpp"
 
 #include "bwt.hpp"
+#include "view.hpp"
+
 
 #include "ui.hpp"
 #include "evo_tree.hpp"
@@ -825,22 +827,16 @@ int output_results(cly_r *results, int n_results)
 }
 int build_index(opts* p_opt)
 {
-
 	const char *kmerPath = p_opt->sortedKmer.c_str();
 	const char *refPath = p_opt->ref.c_str();
-
-	const char *taxonomyNodesPath = p_opt->tids.c_str();
-	//const char *giTaxidPath = p_opt->gids.c_str();
+	const char *taxonomyNodesPath = p_opt->evo_tree_path.c_str();
 	const char *dirPath = p_opt->output.c_str();
 	
 
-	//vector<uint64_t> fKmer;
 	_kmer = p_opt->kmer;
 
-	string  bwt_s;
-	vector<uint32_t> nKmerTaxonID;	
 	
-	fprintf(stderr,"start preprocessing......\n");
+	fprintf(stderr,"start indexing......\n");
 	
 
 	//uint64_t hash_index_size = (uint64_t)1 <<((PREINDEXLEN<<1) + 1);
@@ -849,9 +845,8 @@ int build_index(opts* p_opt)
 	
 	bwt *c_bwt = new bwt();
 	//processKmers(refPath, _kmer, kmerPath, taxonomyNodesPath, bwt_s, hash_index, nKmerTaxonID,1);
-	processKmers(refPath, _kmer, kmerPath, taxonomyNodesPath, c_bwt);
+	index(refPath, _kmer, kmerPath, taxonomyNodesPath, c_bwt);
 
-	fprintf(stderr,"writing index....\n");
 	//char *dirPath = ".";
 	//
 	//fprintf(stdout,"bwtstring:%s\n", bwt_s.c_str());
@@ -862,14 +857,15 @@ int build_index(opts* p_opt)
 	c_bwt->dump_index(dirPath);
 	
 	if (c_bwt) delete c_bwt;	
+	fprintf(stderr, "finish indexing\n");
 	return NORMAL_EXIT;
 
 
 }
 
-int thread_initiate(thread_aux *p_aux,int num_threads, bwt *_bt, kseq_t *p_seqs, kseq_t *p_seqsr, cly_r *_res, uint8_t *p_byteformat, uint8_t *p_rbyteformat, int *p_interv, int *p_rinterv, uint32_t *p_tids)
+int thread_initiate(thread_aux *p_aux,int n_thread, bwt *_bt, kseq_t *p_seqs, kseq_t *p_seqsr, cly_r *_res, uint8_t *p_byteformat, uint8_t *p_rbyteformat, int *p_interv, int *p_rinterv, uint32_t *p_tids)
 {
-	for(int i=0; i<num_threads; ++i) {
+	for(int i=0; i<n_thread; ++i) {
 		p_aux[i].threadid = i;
 		p_aux[i]._byteformat = p_byteformat;
 		p_aux[i]._rbyteformat = p_rbyteformat; 
@@ -959,18 +955,18 @@ int taxonTree(const char *taxonomyNodesPath)
 int classify(opts *p_opt)
 {
 	
-	string taxonomyTreePath = p_opt->lib + "/map";
+	string taxonomyTreePath = p_opt->index_dir + "/map";
 
 	_kmer = --p_opt->seed;
 
-	c_interv = p_opt->inv;
-	c_iter = p_opt->iteration;
+	c_interv = p_opt->intv;
+	c_iter = p_opt->iter;
 
 	bwt *bt =new bwt(_kmer);
 	
 	fprintf(stderr,"loading index\n");
 
-	bt->load_index(p_opt->lib.c_str());
+	bt->load_index(p_opt->index_dir.c_str());
 	
 	taxonTree(taxonomyTreePath.c_str());
 	//map<uint32_t, uint32_t>::iterator it = taxonomyTree.begin();
@@ -1020,27 +1016,27 @@ int classify(opts *p_opt)
 	
 
 
-	int num_reads = p_opt->reads.size();	
+	int num_reads = p_opt->read_fns.size();	
 	
-	uint32_t assignedTID[p_opt->num_threads * 1024];
-	uint8_t byteFormat[p_opt->num_threads * 1024]; 
-	uint8_t rbyteFormat[p_opt->num_threads *1024];
-	int intervals[p_opt->num_threads * 1024];
-	int rintervals[p_opt->num_threads *1024];	
-	if (p_opt->num_threads >1) {
-		thread_aux *aux = new thread_aux[p_opt->num_threads];
-		thread_initiate(aux,p_opt->num_threads,bt, seqs, seqsr, results, byteFormat, rbyteFormat, intervals, rintervals, assignedTID);
+	uint32_t assignedTID[p_opt->n_thread * 1024];
+	uint8_t byteFormat[p_opt->n_thread * 1024]; 
+	uint8_t rbyteFormat[p_opt->n_thread *1024];
+	int intervals[p_opt->n_thread * 1024];
+	int rintervals[p_opt->n_thread *1024];	
+	if (p_opt->n_thread >1) {
+		thread_aux *aux = new thread_aux[p_opt->n_thread];
+		thread_initiate(aux,p_opt->n_thread,bt, seqs, seqsr, results, byteFormat, rbyteFormat, intervals, rintervals, assignedTID);
 		if (p_opt->isPaired) {
 			if (num_reads % 2 == 0) {
 				for (int i=0; i<num_reads; ++i) {
-					fp = gzopen(p_opt->reads[i].c_str(), "r");
+					fp = gzopen(p_opt->read_fns[i].c_str(), "r");
 
 					if (!fp) return FILE_OPEN_ERROR;
 
 					_fp = ks_init(fp);
 					
 					++i;
-					fpr = gzopen(p_opt->reads[i].c_str(), "r");
+					fpr = gzopen(p_opt->read_fns[i].c_str(), "r");
 
 					if (!fpr) return FILE_OPEN_ERROR;
 
@@ -1053,10 +1049,10 @@ int classify(opts *p_opt)
 							break;
 						} 	
 						read_seq = 0;
-						//int average_read_num = n_seqs/p_opt->num_threads;
+						//int average_read_num = n_seqs/p_opt->n_thread;
 						//int pointer = 0;
-						pthread_t *tid = (pthread_t *)calloc(p_opt->num_threads, sizeof(pthread_t));
-						for (int j=0; j < p_opt->num_threads;++j) {
+						pthread_t *tid = (pthread_t *)calloc(p_opt->n_thread, sizeof(pthread_t));
+						for (int j=0; j < p_opt->n_thread;++j) {
 							//aux[j].trunkNum = average_read_num;
 							//aux[j].seqs_poi = seqs + pointer;
 							//aux[j].res = results + pointer;
@@ -1071,7 +1067,7 @@ int classify(opts *p_opt)
 							//pthread_create(&tid[j], NULL, thread_worker, aux + j);
 						
 						//classify_seq_2(seqs, n_seqs , bt, results );
-						for (int j = 0; j < p_opt->num_threads; ++j) pthread_join(tid[j], 0);
+						for (int j = 0; j < p_opt->n_thread; ++j) pthread_join(tid[j], 0);
 						free(tid);
 						output_results(results, n_seqs);
 						total_sequences += n_seqs;
@@ -1086,7 +1082,7 @@ int classify(opts *p_opt)
 		
 			for (int i=0; i<num_reads; ++i) {
 				
-				fp = gzopen(p_opt->reads[i].c_str(), "r");
+				fp = gzopen(p_opt->read_fns[i].c_str(), "r");
 
 				if (!fp) return FILE_OPEN_ERROR;
 
@@ -1094,10 +1090,10 @@ int classify(opts *p_opt)
 				
 				while ((n_seqs = read_reads(_fp, seqs, N_NEEDED) )> 0) 	{
 					read_seq = 0;
-					//int average_read_num = n_seqs/p_opt->num_threads;
+					//int average_read_num = n_seqs/p_opt->n_thread;
 					//int pointer = 0;
-					pthread_t *tid = (pthread_t *)calloc(p_opt->num_threads, sizeof(pthread_t));
-					for (int j=0; j < p_opt->num_threads;++j) {
+					pthread_t *tid = (pthread_t *)calloc(p_opt->n_thread, sizeof(pthread_t));
+					for (int j=0; j < p_opt->n_thread;++j) {
 						//aux[j].trunkNum = average_read_num;
 					//aux[j].seqs_poi = seqs + pointer;
 						//aux[j].res = results + pointer;
@@ -1112,7 +1108,7 @@ int classify(opts *p_opt)
 						//pthread_create(&tid[j], NULL, thread_worker, aux + j);
 					
 					//classify_seq_2(seqs, n_seqs , bt, results );
-					for (int j = 0; j < p_opt->num_threads; ++j) pthread_join(tid[j], 0);
+					for (int j = 0; j < p_opt->n_thread; ++j) pthread_join(tid[j], 0);
 					if (tid) free(tid);
 					output_results(results, n_seqs);
 					total_sequences += n_seqs;
@@ -1127,7 +1123,7 @@ int classify(opts *p_opt)
 		if (p_opt->isPaired) {
 			if (num_reads % 2 == 0) {
 				for (int i=0; i < num_reads; ++i) {
-					fp = gzopen(p_opt->reads[i].c_str(), "r");
+					fp = gzopen(p_opt->read_fns[i].c_str(), "r");
 											
 					if (!fp) return FILE_OPEN_ERROR;
 
@@ -1136,7 +1132,7 @@ int classify(opts *p_opt)
 
 					++i;
 					
-					fpr = gzopen(p_opt->reads[i].c_str(), "r");
+					fpr = gzopen(p_opt->read_fns[i].c_str(), "r");
 											
 					if (!fpr) return FILE_OPEN_ERROR;
 
@@ -1165,7 +1161,7 @@ int classify(opts *p_opt)
 		} else {
 			for (int i=0; i<num_reads; ++i) {
 				
-				fp = gzopen(p_opt->reads[i].c_str(), "r");
+				fp = gzopen(p_opt->read_fns[i].c_str(), "r");
 
 				if (!fp) return FILE_OPEN_ERROR;
 
@@ -1207,6 +1203,27 @@ int classify(opts *p_opt)
 
 }
 
+int view_f(opts *o)
+{
+	bwt *bt = new bwt(31); //should not give any params, create a new constructor ? 
+	view v(bt, bt->taxid_base_num(), bt->taxonIDTab);
+	int taxids_size = o->taxids.size();
+	if (taxids_size) {
+		int i,j;
+		for (i= j = 0; j <= taxids_size; ++j) 
+			if ((j == taxids_size || o->taxids[j] == ',') && (j - i)) {
+				uint32_t tid = strtoul(o->taxids.substr(i, j - i).c_str(), NULL, 10);
+				v.view_single(tid);	
+				i = j + 1;
+			}			
+	} else 
+		v.view_all();		
+	if (bt) delete bt;
+	return 0;	
+}
+
+
+
 int main(int argc, char *argv[])
 {
 	opts *_opt = new opts;
@@ -1215,10 +1232,13 @@ int main(int argc, char *argv[])
 	
 	if (ui.opt_parse(argc,argv,_opt) == ERROR_PARSE_PARAMS)
 		exit(1);
-
-	if (_opt->isClassify) classify(_opt);
-	else build_index(_opt);
-		
+	
+	if (_opt->option == CLASSIFY) 
+		classify(_opt);
+	else if (_opt->option == INDEX) 
+		build_index(_opt);
+	else 
+		view_f(_opt);	
 	//char *st;
 	
 	//uint32_t *uts;

@@ -24,24 +24,34 @@ using namespace std;
 #include <string.h>
 #include "desc.h"
 
+#define INDEX 1
+#define CLASSIFY 2
+#define VIEW 3
+//should separate different paramaters for different opitons 
+//
 typedef struct options {
-	bool isClassify;
-	bool isPaired;
-	uint8_t kmer;
-	string sortedKmer;
-	string gids;
-	string tids;
-	string ref;
-	string output;
+	uint8_t kmer;//both 
+	string sortedKmer; //index
+	//string gids;
+	string ref;//used?
+	string output; //index output dir
 	
-	string lib;
-	uint8_t seed;
-	int inv;
-	int iteration;
-	int num_threads;
-	vector<string> reads;
-	int argc;
-	char **argv;
+	int		option; // 1 build index 2 classify 3 view;	
+	bool isPaired;//classify
+	string index_dir;//still used ? maybe not
+	uint8_t seed;//classify 
+	int intv;//clasisfy 
+	int iter;//classify not used 
+	int n_thread; //classify 
+	vector<string> read_fns; //classify
+	string evo_tree_path;
+	
+	//view
+	bool out_all;
+	string taxids;
+	
+	int argc; //all
+	char **argv;//all
 }opts;
 
 
@@ -51,5 +61,6 @@ public:
 	int usage();
 	int ind_usage();
 	int classify_usage();
+	int view_usage();
 	int opt_parse(int argc, char *argv[], opts* opt);
 };

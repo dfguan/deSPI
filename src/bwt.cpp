@@ -95,6 +95,29 @@ uint64_t bwt::transIntoBits(uint8_t *bytes_kmer, uint8_t len)
 	return value;
 
 }
+
+
+
+
+//give a sp get the sequence until a # is met
+int bwt::get_seq(uint64_t sp, string &seq)
+{
+	uint64_t transInd = ((sp>>8)+1)*40 + (sp >> 1);
+	char nucl_table[] = {'A','C','G','T'};
+	uint8_t c = (bwt_occ[transInd] >> ((sp & 0x1) << 2))& 0xF;
+	seq += nucl_table[c];
+	while (c != 4 ) {
+		sp = LFC(sp, c);
+		//fprintf(stderr,"%lu\t%x\n",sp,c);
+		transInd = ((sp>>8)+1)*40 + (sp >> 1);
+		c = (bwt_occ[transInd] >> ((sp & 0x1) << 2))& 0xF;
+		seq += nucl_table[c];
+	}
+	return 0;
+}
+
+
+
 uint32_t bwt::locate(uint64_t sp)
 {
 	uint64_t transInd = ((sp>>8)+1)*40 + (sp >> 1);
@@ -153,6 +176,9 @@ uint32_t bwt::locate(uint64_t sp, uint8_t *bytes, char *qual, int loc, int &exte
 
 
 }
+
+
+
 
 int bwt::exactMatch(uint8_t *bytes, char *qual, int len, int& match_len, uint32_t* assignedTID) 
 {
@@ -673,7 +699,7 @@ int bwt::dump_index(const char *dirPath)
 		fwrite(AGCTCounter, sizeof(uint8_t), AGCTCounterSize, bwt_fp);
 	} 
 	
-	fprintf(stderr,"finish dumping bwt index to disk\n");
+	fprintf(stderr,"finish dumping index to disk\n");
 	fprintf(stderr,"start dumping SA to disk\n");
 	fwrite(&tidSize, sizeof(uint64_t), 1, tid_fp );
 
@@ -686,6 +712,7 @@ int bwt::dump_index(const char *dirPath)
 	
 	return NORMAL_EXIT;
 }
+
 
 //int bwt::dump_index(const char *dirPath, vector<uint32_t>& p_nkmerTID)
 //{

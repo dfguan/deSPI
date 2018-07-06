@@ -36,7 +36,7 @@ int mergeSort(char *fpkmers, const uint8_t _kmer, se_node *_se_,  uint64_t kmers
 int mergeSort(char *fpkmers, const uint8_t _kmer, se_node *_se_, uint64_t kmersSpcharN, string& p_bwt, vector<uint32_t>& nkmerTID, uint64_t *hash_index, uint64_t index_start_point);
 int processKmers(const char *refListPath, const uint8_t kmerSize,const  char *disorderedKmerpath,const char *evo_tree_path, string &bwt_s, uint64_t *hash_index, vector<uint32_t> &nkmerTID);
 int processKmers(const char *refListPath, const uint8_t kmerSize,const  char *disorderedKmerpath,const char *evo_tree_path, string &bwt_s, uint64_t *hash_index, vector<uint32_t> &nkmerTID, int diff);
-int processKmers(const char *refListPath, const uint8_t kmerSize,const  char *disorderedKmerpath,const char *evo_tree_path, bwt *c_bwt);
+int index(const char *refListPath, const uint8_t kmerSize,const  char *disorderedKmerpath,const char *evo_tree_path, bwt *c_bwt);
 //int processKmers(char *refListPath, const uint8_t kmerSize, char *disorderedKmerpath, char *evo_tree_path, string &bwt_s, uint64_t *hash_index, vector<uint32_t> &nkmerTID);
 //int mergeKmers(char *sortedKmersPath, const uint8_t _kmer_len, kmersSpchar *_kspchar, uint64_t kmersSpcharN, map<uint64_t, struct end_tid> &pairs, string &bwt_s, uint64_t *hash_index, vector<uint32_t> nkmerTID, uint64_t index_start_point);
 //int mergeKmers(char *sortedKmersPath, const uint8_t _kmer_len, kmersSpchar *_kspchar, uint64_t kmersSpcharN, kbtree_t(uint64_t) *bt, string &bwt_s, uint64_t *hash_index, vector<uint32_t> nkmerTID, uint64_t index_start_point);

@@ -36,8 +36,8 @@ class bwt{
 	uint64_t 		len_bwt_occ;
 
 	uint8_t* 		AGCTCounter;
-
 	uint64_t		rank[5];
+
 	
 
 	int 			threshold;
@@ -47,9 +47,9 @@ class bwt{
 
 	//uint64_t 		occCount;
 
-
 	uint64_t LFC(uint64_t r, uint8_t c);
 	uint64_t occ(uint64_t r, uint8_t c);
+
 	uint32_t locate(uint64_t sp);
 	uint32_t locate(uint64_t sp, uint8_t *bytes, char *qual, int loc, int &extend);
 public:	
@@ -75,6 +75,9 @@ public:
 		uint64_t hash_index_size = (uint64_t)1 <<((PREINDEXLEN<<1) + 1);
 		hash_index = (uint64_t *)calloc(hash_index_size, sizeof(uint64_t));
 		for (int i=0; i<5; rank[i++] = 0);
+	}
+	uint64_t taxid_base_num() {
+		return rank[0];
 	}
 	bwt(char *bt, uint64_t len, uint64_t *p_hash_index): bwt_str(bt),  len_bwt_str(len) {
 		hash_index = p_hash_index;
@@ -104,6 +107,7 @@ public:
 	int load_index(const char *dirPath);
 	
 	int rmdup(uint32_t *temp, int counter, uint32_t* assignedTID);
+	int get_seq(uint64_t s, string &str);
 };
 
 
