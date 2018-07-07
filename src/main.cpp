@@ -1206,7 +1206,7 @@ int classify(opts *p_opt)
 int view_f(opts *o)
 {
 	bwt *bt = new bwt(31); //should not give any params, create a new constructor ? 
-	view v(bt, bt->taxid_base_num(), bt->taxonIDTab);
+	view v(bt, bt->taxid_base_num(), bt->taxonIDTab, o->outfmt);
 	int taxids_size = o->taxids.size();
 	if (taxids_size) {
 		int i,j;

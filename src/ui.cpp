@@ -23,7 +23,7 @@
 
 
 
-char *const short_options = "k:x:r:s:i:t:pah";
+char *const short_options = "O:k:x:r:s:i:t:ph";
 struct option long_options[] = {
     //{ "kmer_len",     1,   NULL,    'm'   },
     { "kmers",     1,   NULL,    'k' },
@@ -38,8 +38,9 @@ struct option long_options[] = {
     {"paired", 0, NULL, 'p'},
     //{"gapextended", 1,  NULL,'e'},
     //{"match",   1,  NULL,'c'},
-	{"all", 0, NULL, 'a'},
+	//{"all", 0, NULL, 'a'},
 	{"taxid", 1, NULL, 'x'},
+	{"outfmt", 1, NULL, 'O'},
 	{ "help",    0,  NULL,'h'},
     { 0,     0,   0,    0   }
 };
@@ -55,8 +56,9 @@ UI::UI(opts *opt)
 	opt->intv= 4;
 	opt->iter = 5;
 	opt->isPaired = false;
-	opt->out_all = true;
+	//opt->out_all = true;
 	opt->taxids = "";
+	opt->outfmt = "fasta";
 }
 
 int UI::view_usage()
@@ -69,6 +71,7 @@ int UI::view_usage()
 	fprintf(stderr, "<IndexDir>              the directory contains deSPI index\n");
 	
 	fprintf(stderr, "           -x, --taxid      <uint32_t>+          output unitigs corresponding to the taxonomy id, use comma to join multiple ids, output all unitigs if not set\n"); 
+	fprintf(stderr, "           -O, --outfmt      <string>            output format, can be fasta or gfa [fasta]\n"); 
 	fprintf(stderr, "           -h, --help                           help\n");
 	fprintf(stderr, "\n"); 
 	return ERROR_PARSE_PARAMS;
@@ -141,7 +144,7 @@ int cmd_usage()
 	fprintf(stderr,"%s commands are:\n\n", PACKAGE_NAME);
 	fprintf(stderr,"                index      build index for a reference library\n");
 	fprintf(stderr,"                classify   classify metagenomics reads\n");
-	fprintf(stderr,"                view       extract sequences in database\n");
+	fprintf(stderr,"                view       extract unitigs in a database\n");
 	fprintf(stderr,"                help       list further help information\n");
 	fprintf(stderr,"\n");
 	return ERROR_PARSE_PARAMS;
@@ -198,11 +201,15 @@ int UI::opt_parse(int argc, char *argv[], opts* opt)
 		    case 'p':
 				opt->isPaired = true;
 				break;
-			case 'a':
-				opt->out_all = true;
-				break;
+			//case 'a':
+				//opt->out_all = true;
+				//break;
 			case 'x':
 				opt->taxids = optarg;
+				break;
+			case 'O':
+				if(!strcmp(optarg, "GFA")) 
+					opt->outfmt = "GFA";
 				break;
 		    default:
 				fprintf(stderr,"inappropriate parameters\n");

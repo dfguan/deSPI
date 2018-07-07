@@ -49,7 +49,8 @@ typedef struct options {
 	//view
 	bool out_all;
 	string taxids;
-	
+	string outfmt;	
+
 	int argc; //all
 	char **argv;//all
 }opts;
