@@ -40,7 +40,7 @@ int view::view_single(uint64_t s, string &ns)
 {
 	++s;
 	if ( s == taxid_n) s = 0;
-	bwt_p->get_seq(s, ns);	
+	bwt_p->get_utg(s, ns);	
 	return 0;
 }
 

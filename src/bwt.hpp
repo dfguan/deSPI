@@ -107,7 +107,7 @@ public:
 	int load_index(const char *dirPath);
 	
 	int rmdup(uint32_t *temp, int counter, uint32_t* assignedTID);
-	int get_seq(uint64_t s, string &str);
+	int get_utg(uint64_t s, string &str);
 };
 
 
