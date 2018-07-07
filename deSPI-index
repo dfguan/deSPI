@@ -2,13 +2,14 @@
 #set -x 
 
 USAGE="
-`basename $0` <REF2TID_MAP> <TAXONOMY_TREE> <BIN_DIR> <INDEX_DIR>
+`basename $0` <REF2TID_MAP> <TAXONOMY_TREE> <BIN_DIR> <INDEX_DIR> <KMERSIZE>
 
 ARGUMENT
     <REF2TID_MAP>    <FILE>        reference file path mapped to taxonomy id.  				
     <NODE_PATH>      <FILE>        path of taxonomy tree (nodes.dmp).
     <BIN_DIR>        <DIR>         directory of deSPI's execuative files.
     <INDEX_DIR>      <DIR>         directory for deSPI's index.
+    <KMERSIZE>       <INT>         kmer size for building Debruijn graph [0, 31]. 
 "
 if [ $# -lt 4 ]
 then
@@ -17,7 +18,7 @@ then
 	exit 1
 fi
 
-check_for_jdbg() {
+check_for_bins() {
 	DESPI_BIN_DIR=$1
 	if [ -f "$DESPI_BIN_DIR"/jdbg ] && [ -f "$DESPI_BIN_DIR"/deSPI ]
 	then
@@ -29,21 +30,22 @@ check_for_jdbg() {
 }
 
 REFERENCE_PATH=$(readlink -f $1)
-KMER_SIZE=31
 TAXONOMY_TREE_PATH=$(readlink -f $2)
 DESPI_BIN_DIR=$(readlink -f $3)
 INDEX_DIR=$(readlink -f $4)
+KMER_SIZE=$5
 
+mkdir -p $INDEX_DIR
 TMPDIR="$INDEX_DIR""/tmp"
-ABOREFPATH=$(pwd)"/.abo_ref_path"
+ABOREFPATH="$INDEX_DIR""/.abo_ref_path"
 
-if check_for_jdbg $DESPI_BIN_DIR
+if check_for_bins $DESPI_BIN_DIR
 then
 
 	if [ ! -f "$TAXONOMY_TREE_PATH" ]
 	then
 		echo "evolutionary tree missing error, please download it from NCBI"
-		exit 1
+		exit 
 	fi
 	if [ ! -f "$REFERENCE_PATH" ]
 	then
@@ -105,8 +107,14 @@ then
 		then
 			if [ ! -f "mer_counts_0" ]
 			then
-				echo "generating kmers, hash size:$JELLYFISH_HASH_SIZE"
+				echo "counting kmers, hash size:$JELLYFISH_HASH_SIZE"
 				"$DESPI_BIN_DIR"/jdbg count -m $KMER_SIZE -s $JELLYFISH_HASH_SIZE -t 4 -C -T $TAXONOMY_TREE_PATH $ABOREFPATH
+				# if fail to create
+				if [ ! $? -eq 0 ]
+				then
+					echo "jdbg failed to count kmers"
+					exit 1
+				fi
 				#rm -f $TRANSIT_REFERENCE_PATH
 			fi
 
@@ -114,12 +122,17 @@ then
 			then
 				#echo hahahha
 				$DESPI_BIN_DIR/jdbg merge -o database.jdb.tmp -T $TAXONOMY_TREE_PATH mer_counts_* # && touch .jf.merge
+				if [ ! $? -eq 0 ]
+				then
+					echo "jdbg failed to merge kmers"
+					exit 1
+				fi
 			else
 				if [ -f "mer_counts_0" ]
 				then
 					mv mer_counts_0 database.jdb.tmp 
 				else
-					echo "Fail to use jdbg generate kmers"
+					echo "jdbg failed to count kmers"
 					exit 1
 				fi
 			fi
@@ -127,9 +140,9 @@ then
 			if [ -f "database.jdb.tmp" ]
 			then	
 				mv database.jdb.tmp ../database.jdb
-				echo "finish generating kmers"
+				echo "jdbg finished kmer counting"
 			else
-				echo "Fail to generate kmers"
+				echo "jdbg failed to count kmers"
 				exit 1
 			fi
 		fi
@@ -141,17 +154,21 @@ then
 	echo "building deSPI index......"
 	if [ -f database.jdb ]
 	then
-		$DESPI_BIN_DIR/deSPI index database.jdb $TAXONOMY_TREE_PATH $ABOREFPATH $INDEX_DIR # >/dev/null 2>/dev/null
+		$DESPI_BIN_DIR/deSPI index -k $KMER_SIZE database.jdb $TAXONOMY_TREE_PATH $ABOREFPATH $INDEX_DIR # >/dev/null 2>/dev/null
+		if [ ! $? -eq 0 ]
+		then
+			echo "deSPI failed to build the index"
+			exit 1
+		fi
 		$DESPI_BIN_DIR/convert2map	$TAXONOMY_TREE_PATH species > $INDEX_DIR/map
 	fi
 	#rm -f database.srt ksp.srt
 	rm -f $ABOREFPATH 	
-	echo "finished building deSPI index ^_^"
+	echo "deSPI finished building deSPI index ^_^"
 else 
 	echo "jdbg or deSPI missing error, re-download deSPI package to find"
 	exit 1
 fi	
-
 cd ..
 
 

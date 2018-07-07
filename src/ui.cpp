@@ -154,7 +154,7 @@ int cmd_usage()
 int UI::opt_parse(int argc, char *argv[], opts* opt)
 {
 	int c; 
-    	int option_index=0;
+	int option_index=0;
 	
 	if (argc < 2) return usage();
 	if (strcmp(argv[1],"help")==0) {
@@ -217,34 +217,28 @@ int UI::opt_parse(int argc, char *argv[], opts* opt)
 		      
 		}
 	}
+	++optind;	
+	//fprintf(stderr, "%d\t%d\t%s\n",optind,argc, argv[optind]);
 	if (opt->option == CLASSIFY) {
 	//for (int i=optind; i < argc; ++i)
 			//fprintf(stderr,"%d\t%s\t",i,argv[i]);
-		if (optind + 3 > argc) {
+		if (optind + 2 > argc) {
 			fprintf(stderr, "[opt_parse]: arguments can't be omited!\n"); 
 			return classify_usage(); 
-		} else {
-			++optind;	
-			opt->index_dir = argv[optind++];
-			//fprintf(stderr,"%d\t%s\n",optind, argv[optind++]);
-			while (optind < argc) opt->read_fns.push_back(argv[optind++]);
-		}
-			
+		} 
+		opt->index_dir = argv[optind++];
+		//fprintf(stderr,"%d\t%s\n",optind, argv[optind++]);
+		while (optind < argc) opt->read_fns.push_back(argv[optind++]);
 	} else if (opt->option == INDEX) {
-	
-		if (optind + 5 > argc) {
+		if (optind + 4 > argc) {
 			fprintf(stderr, "[opt_parse]: arguments can't be omited!\n"); 
 			return ind_usage(); 
-		
-		} else {
-			++optind;
-			opt->sortedKmer = argv[optind++];
-			//opt->gids = argv[optind++];
-			opt->evo_tree_path = argv[optind++];
-			opt->ref = argv[optind++];
-			opt->output = argv[optind++];
-		
 		} 
+		opt->sortedKmer = argv[optind++];
+		//opt->gids = argv[optind++];
+		opt->evo_tree_path = argv[optind++];
+		opt->ref = argv[optind++];
+		opt->output = argv[optind++];
 	} else {
 		if (optind + 1 > argc) {
 			fprintf(stderr, "[opt_parse]: arguments can't be omited!\n"); 

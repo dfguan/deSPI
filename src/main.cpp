@@ -1206,8 +1206,11 @@ int classify(opts *p_opt)
 int view_f(opts *o)
 {
 	bwt *bt = new bwt(31); //should not give any params, create a new constructor ? 
+	bt->load_index(o->index_dir.c_str());
+	fprintf(stderr, "loaded index successfully\n");
 	view v(bt, bt->taxid_base_num(), bt->taxonIDTab, o->outfmt);
 	int taxids_size = o->taxids.size();
+	if (!strcmp(o->outfmt.c_str(), "gfa")) fprintf(stdout, "H\tVN:Z:1.0\n");
 	if (taxids_size) {
 		int i,j;
 		for (i= j = 0; j <= taxids_size; ++j) 

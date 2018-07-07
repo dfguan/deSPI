@@ -102,18 +102,18 @@ uint64_t bwt::transIntoBits(uint8_t *bytes_kmer, uint8_t len)
 //give a sp get the unitig until a # is met
 int bwt::get_utg(uint64_t sp, string &utg)
 {
-	uint64_t transInd = ((sp>>8)+1)*40 + (sp >> 1);
+	uint64_t transInd; // = ((sp>>8)+1)*40 + (sp >> 1);
 	char nucl_table[] = {'A','C','G','T'};
-	uint8_t c = (bwt_occ[transInd] >> ((sp & 0x1) << 2))& 0xF;
-	int len_utg = 1;
-	utg += nucl_table[c];
-	while (c != 4 ) {
-		sp = LFC(sp, c);
+	uint8_t c; //= (bwt_occ[transInd] >> ((sp & 0x1) << 2))& 0xF;
+	int len_utg = 0;
+	while (true) {
 		//fprintf(stderr,"%lu\t%x\n",sp,c);
 		transInd = ((sp>>8)+1)*40 + (sp >> 1);
 		c = (bwt_occ[transInd] >> ((sp & 0x1) << 2))& 0xF;
+		if (c == 4) break;//break when c == 4 is met
 		utg += nucl_table[c];
 		++len_utg;//utg_len could be better ? 
+		sp = LFC(sp, c);
 	}
 	//flip the unitig
 	for ( int i = 0; i < (len_utg >> 1); ++i) {
@@ -121,7 +121,7 @@ int bwt::get_utg(uint64_t sp, string &utg)
 		utg[i] = utg[len_utg - 1 - i];
 		utg[len_utg - 1 - i] = c;
 	}
-	return 0;//return length ?  
+	return len_utg;//return length ?  
 }
 
 

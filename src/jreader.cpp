@@ -24,7 +24,7 @@ JReader::JReader(string filename_str, string mode, size_t size)
 void JReader::open_file(string filename_str, string mode, size_t size) 
 {
 	const char *filename = filename_str.c_str();
-	
+	fprintf(stderr, "%s\n",filename);	
 	Input_DB_filename = filename_str;
 	
 	FILE *fp = fopen(filename, mode.c_str());
