@@ -28,7 +28,7 @@ int view::view_all()
 	for ( uint64_t i = 0; i < taxid_n; ++i) {
 		int len_seq = view_single(i, nucl_seq);
 		if (out_fmt == FASTA) 
-			fprintf(stdout, ">%u\n%s\n", taxid_tab[i],nucl_seq.c_str());
+			fprintf(stdout, ">%u %lu\n%s\n", taxid_tab[i], len_seq, nucl_seq.c_str());
 		else 
 			fprintf(stdout, "S\t%lu\t%s\tLN:i:%d\tTI:I:%u\n",cnt, nucl_seq.c_str(), len_seq, taxid_tab[i]);
 		++cnt;

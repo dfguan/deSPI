@@ -9,7 +9,7 @@ ARGUMENT
     <NODE_PATH>      <FILE>        path of taxonomy tree (nodes.dmp).
     <BIN_DIR>        <DIR>         directory of deSPI's execuative files.
     <INDEX_DIR>      <DIR>         directory for deSPI's index.
-    <KMERSIZE>       <INT>         kmer size for building Debruijn graph [0, 31]. 
+    <KMERSIZE>       <INT>         kmer size for building Debruijn graph [0-31]. 
 "
 if [ $# -lt 4 ]
 then
