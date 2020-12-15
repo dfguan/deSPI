@@ -7,8 +7,8 @@
 #Email: dfguan@hit.edu.cn
 #Please feel free to contact me if there are problems in the script 
 
-set -eu -o pipefail
-#set -x
+#set -eu -o pipefail
+set -x
 exists() {
   command -v "$1" >/dev/null 2>&1
 }
@@ -192,7 +192,7 @@ fi
     #echo "Modifying header to include taxonomy ID" >&2
 #fi
 
-
+echo $DOMAINS
 for DOMAIN in $DOMAINS; do
     if [[ ! `grep " $DOMAIN" .listing` ]]; then
         echo "$DOMAIN is not a valid domain - use one of the following:" >&2
@@ -206,8 +206,9 @@ for DOMAIN in $DOMAINS; do
     #fi
 
     export DOMAIN=$DOMAIN
+	echo $LIBDIR/$DOMAIN
     check_or_mkdir_no_fail $LIBDIR/$DOMAIN
-	#echo $LIBDIR
+	echo $LIBDIR
     FULL_ASSEMBLY_SUMMARY_FILE="$LIBDIR/$DOMAIN/assembly_summary.txt"
     ASSEMBLY_SUMMARY_FILE="$LIBDIR/$DOMAIN/assembly_summary_filtered.txt"
 
