@@ -11,7 +11,7 @@ cd ..
 
 ./deSPI-download -o taxonomy taxonomy  
 
-./deSPI-index test/refs/ref2tid.map taxonomy/nodes.dmp bin index
+./deSPI-index test/refs/ref2tid.map taxonomy/nodes.dmp bin index KMER_SIZE
 
 bin/deSPI classify index test/reads/reads.fa >Labels
 ```
